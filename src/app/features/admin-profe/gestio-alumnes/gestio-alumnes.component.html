@@ -1,0 +1,23 @@
+<section class="llista">
+  @for (alumne of alumnes; track alumne.id) {
+    <div class="fila-alumne">
+      <span>{{ alumne.nom }}</span>
+      <span>{{ alumne.cognom1 }}</span>
+      <span>{{ alumne.cognom2 }}</span>
+      <span>Susceptible: {{ alumne.susceptible ? 'Sí' : 'No' }}</span>
+      <button (click)="editar(alumne)">Editar</button>
+      <button (click)="eliminar(alumne)">Eliminar</button>
+    </div>
+  }
+</section>
+
+<section class="nou-alumne">
+  <input placeholder="Nom" [(ngModel)]="nouAlumne.nom" name="nom" />
+  <input placeholder="Cognom 1" [(ngModel)]="nouAlumne.cognom1" name="cognom1" />
+  <input placeholder="Cognom 2" [(ngModel)]="nouAlumne.cognom2" name="cognom2" />
+  <label>
+    <input type="checkbox" [(ngModel)]="nouAlumne.susceptible" name="susceptible" />
+    Susceptible
+  </label>
+  <button (click)="crear()">Crear</button>
+</section>

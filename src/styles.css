@@ -1,2 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
-/* alfo */
+/* Paleta de colors (extreta de la imatge de referència) */
+:root {
+  --verd-fosc: #1C541D;
+  --beige-clar: #E0D0A3;
+  --oliva: #859933;
+  --verd-clar: #A4D279;
+  --beige-fosc: #DFCF9F;
+  --negre: #0B0404;
+  --text-clar: #FFFFFF;
+  --text-fosc: #262626;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--beige-clar);
+  color: var(--text-fosc);
+}

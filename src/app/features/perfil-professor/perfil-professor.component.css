@@ -1,0 +1,24 @@
+.perfil {
+  border: 2px solid #8B5CF6; /* referència al requadre lila del wireframe */
+  border-radius: 6px;
+  padding: 0.6rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  background: var(--beige-fosc);
+  max-width: 320px;
+}
+
+.perfil .foto {
+  background: #999;
+  color: white;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.perfil .dades {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,8 @@
+<div class="buscador">
+  <select [(ngModel)]="tipus" name="tipus">
+    <option value="professor">Professor</option>
+    <option value="alumne">Alumne</option>
+  </select>
+  <input placeholder="correu electrònic" [(ngModel)]="gmail" name="gmail" />
+  <button (click)="cercar()">Cercar</button>
+</div>
