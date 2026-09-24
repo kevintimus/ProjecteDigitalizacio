@@ -1,0 +1,10 @@
+.buscador {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--beige-fosc);
+  padding: 0.6rem;
+  border-radius: 4px;
+
+  select, input { padding: 0.4rem; }
+  button { background: var(--oliva); color: var(--text-clar); border: none; border-radius: 4px; padding: 0.4rem 0.8rem; }
+}

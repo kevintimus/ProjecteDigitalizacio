@@ -1,0 +1,14 @@
+.lector {
+  background: var(--negre);
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+
+  input { width: 100%; padding: 0.5rem; border-radius: 4px; border: none; }
+}
+
+.targetes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}

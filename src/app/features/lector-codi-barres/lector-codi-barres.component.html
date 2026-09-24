@@ -1,0 +1,15 @@
+<div class="lector">
+  <input
+    placeholder="Llegir codi de barres (ID de l'alumne)"
+    [(ngModel)]="codiEscanejat"
+    name="codi"
+    (keyup.enter)="onCodiLlegit()"
+    autofocus
+  />
+</div>
+
+<div class="targetes">
+  @for (alumne of alumnesActius; track alumne.id) {
+    <app-alumne-bany [alumne]="alumne" (finalitzat)="onAlumneSurt($event)" />
+  }
+</div>

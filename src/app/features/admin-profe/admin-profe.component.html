@@ -1,0 +1,20 @@
+<header class="capçalera">Admin Profe</header>
+
+@if (auth.professorActual(); as professor) {
+  <app-perfil-professor [professor]="professor" />
+}
+
+<nav class="menu">
+  <!-- Aquestes opcions només es veuen si el professor loguejat és admin -->
+  @if (auth.esAdmin()) {
+    <a routerLink="professors">Editar / Afegir / Esborrar Professor</a>
+    <a routerLink="alumnes">Editar / Afegir / Esborrar Alumne</a>
+  }
+  <a routerLink="buscador">Buscador</a>
+  <a routerLink="estadistiques">Estadístiques Generals</a>
+  <a routerLink="lector">Lector de codi de barres</a>
+</nav>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

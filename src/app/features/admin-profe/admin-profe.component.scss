@@ -1,0 +1,22 @@
+.capçalera {
+  border: 2px solid red; // mateix estil de destacat que al wireframe original
+  text-align: center;
+  padding: 0.5rem;
+  font-weight: bold;
+}
+
+.menu {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  background: var(--beige-clar);
+  padding: 0.75rem;
+
+  a {
+    background: var(--oliva);
+    color: var(--text-clar);
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+}

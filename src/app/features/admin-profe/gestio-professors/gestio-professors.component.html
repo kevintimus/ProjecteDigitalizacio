@@ -1,0 +1,20 @@
+<section class="llista">
+  @for (professor of professors; track professor.id) {
+    <div class="fila-professor">
+      <span>{{ professor.nom }}</span>
+      <span>{{ professor.cognom1 }}</span>
+      <span>{{ professor.cognom2 }}</span>
+      <span>{{ professor.gmail }}</span>
+      <button (click)="editar(professor)">Editar</button>
+      <button (click)="eliminar(professor)">Eliminar</button>
+    </div>
+  }
+</section>
+
+<section class="nou-professor">
+  <input placeholder="Nom" [(ngModel)]="nouProfessor.nom" name="nom" />
+  <input placeholder="Cognom 1" [(ngModel)]="nouProfessor.cognom1" name="cognom1" />
+  <input placeholder="Cognom 2" [(ngModel)]="nouProfessor.cognom2" name="cognom2" />
+  <input placeholder="gmail" [(ngModel)]="nouProfessor.gmail" name="gmail" />
+  <button (click)="crear()">Crear</button>
+</section>

@@ -1,0 +1,10 @@
+.fila-professor, .nou-professor {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  background: var(--verd-clar);
+  padding: 0.5rem;
+  margin-bottom: 0.4rem;
+  border-radius: 4px;
+}
+button { background: var(--verd-fosc); color: var(--text-clar); border: none; border-radius: 4px; padding: 0.3rem 0.6rem; cursor: pointer; }
