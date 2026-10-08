@@ -23,7 +23,8 @@
     "rxjs": "~7.8.0",
     "sequelize": "^6.37.8",
     "sequelize-auto": "^0.8.8",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "zone.js": "^0.16.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.0.0",
