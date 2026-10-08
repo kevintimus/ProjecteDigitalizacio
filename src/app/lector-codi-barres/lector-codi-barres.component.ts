@@ -27,4 +27,5 @@ export class LectorCodiBarresComponent {
   onAlumneSurt(alumneId: string) {
     this.alumnesActius = this.alumnesActius.filter((a) => a.id !== alumneId);
   }
+
 }
