@@ -19,12 +19,13 @@
     "cors": "^2.8.6",
     "dotenv": "^18.0.3",
     "express": "^5.2.1",
+    "google-auth-library": "^11.2.0",
     "mysql2": "^3.24.4",
     "rxjs": "~7.8.0",
     "sequelize": "^6.37.8",
     "sequelize-auto": "^0.8.8",
     "tslib": "^2.3.0",
-    "zone.js": "^0.16.3"
+    "zone.js": "^0.14.10"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.0.0",
