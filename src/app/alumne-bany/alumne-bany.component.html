@@ -1,21 +1,20 @@
-<div class="targeta-alumne">
-  <div class="foto">FOTO</div>
+<div class="targeta-alumne"> @for (alumne of llistaPendents; track alumne.id_ieducat) {
+  <div class="foto">alumne.foto_alum</div>
   <div class="dades">
-    <span>{{ alumne.nom }}</span>
-    <span>{{ alumne.cognom1 }}</span>
-    <span>{{ alumne.cognom2 }}</span>
+    <span>{{ alumne.nom_alum }}</span>
+    <span>{{ alumne.cog1_alum }}</span>
+    <span>{{ alumne.cog2_alum }}</span>
   </div>
   <div>Permís del professor: {{ alumne.permisProfessor ? 'Sí' : 'No' }}</div>
   <div>Susceptible: {{ alumne.susceptible ? 'Sí' : 'No' }}</div>
 
+  <!--
   <div class="hores">
     <span>Hora d'entrada: {{ registreActual?.horaEntrada ?? '—' }}</span>
     <span>Hora de sortida: {{ registreActual?.horaSortida ?? '—' }}</span>
   </div>
+  -->
 
-  @if (!registreActual) {
-    <button (click)="iniciarTemps()">Començar</button>
-  } @else {
     <button class="sortir" (click)="sortir()">SORTIR</button>
-  }
+}
 </div>

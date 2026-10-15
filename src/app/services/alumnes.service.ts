@@ -5,13 +5,13 @@ import { Alumne } from '../models/alumne';
 
 @Injectable({ providedIn: 'root' })
 export class AlumnesService {
-  private apiUrl = '/api/alumnes'; // cambiar cuando haya backend
+  private apiUrl = 'http://localhost:3000/api'; // cambiar cuando haya backend
 
   constructor(private http: HttpClient) {}
 
-  getPerId(id: string): Observable<Alumne> {
+  getAlumnesActius(id: string): Observable<any[]> {
     // id ve del lector de codi de barres
-    return this.http.get<Alumne>(`${this.apiUrl}/${id}`);
+    return this.http.get<any[]>(`${this.apiUrl}/getAlumnes/registre/${id}`);
   }
 
   cercarPerGmail(gmail: string): Observable<Alumne[]> {

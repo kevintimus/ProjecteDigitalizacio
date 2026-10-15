@@ -5,7 +5,7 @@ import { Professor } from '../models/professor';
 
 @Injectable({ providedIn: 'root' })
 export class ProfessorsService {
-  private apiUrl = '/api/professors'; // cambiar cuando haya backend
+  private apiUrl = 'http://localhost:3000/api'; // cambiar cuando haya backend
 
   constructor(private http: HttpClient) {}
 

@@ -37,11 +37,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     hora_sortida: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     hora_entrada: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: false
     }
   }, {
     sequelize,

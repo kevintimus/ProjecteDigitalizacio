@@ -5,7 +5,7 @@ import { RegistreBany } from '../models/registre-bany';
 
 @Injectable({ providedIn: 'root' })
 export class RegistresBanyService {
-  private apiUrl = '/api/registres-bany'; // cambiar cuando haya backend
+  private apiUrl = 'http://localhost:3000/api'; // cambiar cuando haya backend
 
   constructor(private http: HttpClient) {}
 
@@ -19,8 +19,8 @@ export class RegistresBanyService {
     return this.http.put<RegistreBany>(`${this.apiUrl}/${registreId}/finalitzar`, {});
   }
 
-  getActius(): Observable<RegistreBany[]> {
-    return this.http.get<RegistreBany[]>(`${this.apiUrl}?actiu=true`);
+  getActius(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAlumnesPendents`);
   }
 
   getEstadistiquesGenerals(): Observable<unknown> {
