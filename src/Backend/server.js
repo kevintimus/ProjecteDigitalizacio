@@ -19,7 +19,7 @@ app.use(cors({
 app.use(express.json());
 
 const dbSQL = crearConfigBaseDades();
-const { alumnes, grups, professors, registreLababo } = initModels(dbSQL);
+const { alumnes, grups, professors, registreLavabo } = initModels(dbSQL);
 
 //________________________ OBTENIR DADES (GET) ________________________
 app.get('/api/getAlumnes/:id', async (req, res) => {
@@ -64,6 +64,19 @@ app.post('/api/AfegirProfe', async (req, res) => {
     console.error(error);
     res.status(500).json({
       mensaje: "Error al afegir un profesor nou",
+      error: error.message
+    })
+  }
+})
+
+app.post('/api/AfegirRegistreLavabo', async (req, res) => {
+  try {
+    const reg = await registreLavabo
+  } catch (error) {
+    console.error("Error en el post /api/AfegirRegistreLavabo");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al afegir un registre",
       error: error.message
     })
   }
