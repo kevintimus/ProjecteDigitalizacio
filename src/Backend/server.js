@@ -27,6 +27,7 @@ app.get('/api/getAlumnes/:id', async (req, res) => {
   res.json(alum)
 })
 
+//INFO QUE ES VEURÀ UN COP ES REGISTRI A UN ALUMNE
 app.get('/api/getAlumnes/registre/:id', async (req, res) => {
   const alum = await alumnes.findByPk(req.params.id, {
     attributes: ['nom_alum', 'cog1_alum', 'cog2_alum', 'foto_alum', 'susceptible']
@@ -40,7 +41,39 @@ app.get('/api/getProfe/:id', async (req, res) => {
 })
 //________________________ CREAR DADES (POST) ________________________
 
+app.post('/api/AfegirAlumne', async (req, res) => {
+  try {
+    const alum = await alumnes.create(req.body)
+    res.status(201).json(alum)
+  } catch (error) {
+    console.error("Error en el post /api/AfegirAlumne");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al afegir un alumne nou",
+      error: error.message
+    })
+  }
+})
 
+app.post('/api/AfegirProfe', async (req, res) => {
+  try {
+    const prof = await professors.create(req.body)
+    res.status(201).json(prof)
+  } catch (error) {
+    console.error("Error en el post /api/AfegirProfe");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al afegir un profesor nou",
+      error: error.message
+    })
+  }
+})
+
+//________________________ MODIFICAR DADES (PUT) ________________________
+
+app.put('/api/ModificarAlumne', async (req, res) => {
+
+})
 
 
 app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
