@@ -1,7 +1,9 @@
 export interface RegistreBany {
-  id: string;
-  alumneId: string;
-  professorId: string;
-  horaEntrada: Date;
-  horaSortida: Date | null; // null mentre l'alumne encara és al bany
+  id_reg: number;
+  idecat_alum: number;
+  idecat_prof: number;
+  id_grup: string;
+  data: string;
+  hora_entrada: string;
+  hora_sortida: string | null;
 }

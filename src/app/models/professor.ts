@@ -1,11 +1,9 @@
 export interface Professor {
-  id: string;
-  nom: string;
-  cognom1: string;
-  cognom2: string;
-  gmail: string;
-  isAdmin: boolean;   // controla si veu les opcions d'administració
-  aula?: string;
-  curs?: string;
-  fotoUrl?: string;
+  id_ieduca_prof: number;
+  nom_prof: string;
+  cog1_prof: string | null;
+  cog2_prof: string | null;
+  correu: string;
+  contrasenya: string;
+  admin: boolean;
 }

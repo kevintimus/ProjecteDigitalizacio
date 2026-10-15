@@ -1,5 +1,7 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { Alumno, Persona, Profesor, Salida, TipoPersona, nombreCompleto } from './models';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 const hoy = (h: number, m: number): Date => {
   const d = new Date();
@@ -14,20 +16,13 @@ const hoy = (h: number, m: number): Date => {
  */
 @Injectable({ providedIn: 'root' })
 export class DataService {
-  readonly profesores = signal<Profesor[]>([
-    { id: 1, nombre: 'Laura', apellido1: 'García', apellido2: 'Pons', email: 'laura@escuela.test', nacimiento: '1982-03-14', rol: 'admin', aula: '2.04', curso: '1º DAM' },
-    { id: 2, nombre: 'Jordi', apellido1: 'Ferrer', apellido2: 'Vila', email: 'jordi@escuela.test', nacimiento: '1978-11-02', rol: 'profe', aula: '1.12', curso: '2º DAM' },
-    { id: 3, nombre: 'Marta', apellido1: 'Soler', apellido2: 'Puig', email: 'marta@escuela.test', nacimiento: '1990-07-21', rol: 'profe', aula: '0.07', curso: '1º ASIX' },
-  ]);
+  constructor(private http: HttpClient) {}
 
-  readonly alumnos = signal<Alumno[]>([
-    { id: 1, codigo: '1001', nombre: 'Pol', apellido1: 'Martí', apellido2: 'Roca', email: 'pol@alumnos.test', nacimiento: '2006-05-09', susceptible: false },
-    { id: 2, codigo: '1002', nombre: 'Núria', apellido1: 'Casals', apellido2: 'Bosch', email: 'nuria@alumnos.test', nacimiento: '2005-12-30', susceptible: true },
-    { id: 3, codigo: '1003', nombre: 'Àlex', apellido1: 'Vidal', apellido2: 'Serra', email: 'alex@alumnos.test', nacimiento: '2006-02-17', susceptible: false },
-    { id: 4, codigo: '1004', nombre: 'Aitana', apellido1: 'Ruiz', apellido2: 'Gil', email: 'aitana@alumnos.test', nacimiento: '2006-09-03', susceptible: true },
-    { id: 5, codigo: '1005', nombre: 'Hugo', apellido1: 'Molina', apellido2: 'Coll', email: 'hugo@alumnos.test', nacimiento: '2005-06-25', susceptible: false },
-    { id: 6, codigo: '1006', nombre: 'Carla', apellido1: 'Pujol', apellido2: 'Mas', email: 'carla@alumnos.test', nacimiento: '2006-01-11', susceptible: false },
-  ]);
+  private apiUrl = 'http://localhost:3000/api'
+
+  readonly profesores = signal<Profesor[]>([]);
+
+  readonly alumnos = signal<Alumno[]>([]);
 
   readonly salidas = signal<Salida[]>(this.salidasDemo());
 

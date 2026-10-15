@@ -1,9 +1,10 @@
 export interface Alumne {
-  id: string;          // ve del codi de barres
-  nom: string;
-  cognom1: string;
-  cognom2: string;
-  permisProfessor: boolean;
-  susceptible: boolean; // marca alumnes a vigilar més de prop
-  fotoUrl?: string;
+  id_ieducat: number;
+  nom_alum: string;
+  cog1_alum: string | null;
+  cog2_alum: string | null;
+  foto_alum: string;
+  correu_alum: string;
+  susceptible: boolean;
+  id_grup: string;
 }
