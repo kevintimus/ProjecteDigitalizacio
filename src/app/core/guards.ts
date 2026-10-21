@@ -1,16 +1,22 @@
-import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { CanActivate, Router, UrlTree } from '@angular/router';
 import { AuthService } from './auth.service';
 
-export const authGuard: CanActivateFn = () => {
-  const auth = inject(AuthService);
-  return auth.user() ? true : inject(Router).createUrlTree(['/login']);
-};
+@Injectable({ providedIn: 'root' })
+export class AuthGuard implements CanActivate {
+  constructor(private sesionService: AuthService, private enrutador: Router) {}
 
-/** Solo profesores con rol admin; el resto vuelve al inicio */
-export const adminGuard: CanActivateFn = () => {
-  const auth = inject(AuthService);
-  const router = inject(Router);
-  if (!auth.user()) return router.createUrlTree(['/login']);
-  return auth.esAdmin() ? true : router.createUrlTree(['/']);
-};
+  canActivate(): boolean | UrlTree {
+    return this.sesionService.user ? true : this.enrutador.createUrlTree(['/login']);
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class AdminGuard implements CanActivate {
+  constructor(private sesionService: AuthService, private enrutador: Router) {}
+
+  canActivate(): boolean | UrlTree {
+    if (!this.sesionService.user) return this.enrutador.createUrlTree(['/login']);
+    return this.sesionService.esAdmin ? true : this.enrutador.createUrlTree(['/']);
+  }
+}

@@ -1,0 +1,54 @@
+    <main class="page estrecha">
+      <a routerLink="/" class="volver">Volver al inicio</a>
+
+      @if (alumno; as alumnoSeleccionado) {
+        <section class="panel ficha" aria-label="Ficha del alumno">
+          <div class="ficha-cab">
+            <div class="avatar" aria-hidden="true">{{ obtenerIniciales(alumnoSeleccionado) }}</div>
+            <div>
+              <h1>{{ obtenerNombreCompleto(alumnoSeleccionado) }}</h1>
+              @if (alumnoSeleccionado.susceptible) { <span class="chip chip-alerta">Susceptible</span> }
+            </div>
+          </div>
+          <dl class="datos">
+            <div><dt>Correo</dt><dd>{{ alumnoSeleccionado.email }}</dd></div>
+            <div><dt>Código</dt><dd>{{ alumnoSeleccionado.codigo }}</dd></div>
+            <div><dt>Fecha de nacimiento</dt><dd>{{ formatearFecha(alumnoSeleccionado.nacimiento) }}</dd></div>
+            <div><dt>Salidas registradas</dt><dd>{{ datosService.totalSalidasDe(alumnoSeleccionado.id) }}</dd></div>
+          </dl>
+          <div class="acciones">
+            <a class="btn btn-lima" [routerLink]="['/admin', 'alumnos', 'editar']" [queryParams]="{ correo: alumnoSeleccionado.email }">Editar alumno</a>
+            <a class="btn btn-claro" [routerLink]="['/admin', 'alumnos', 'borrar']" [queryParams]="{ correo: alumnoSeleccionado.email }">Borrar alumno</a>
+          </div>
+        </section>
+      } @else {
+       @if (profesor; as profesorSeleccionado) {
+        <section class="panel ficha" aria-label="Ficha del profesor">
+          <div class="ficha-cab">
+            <div class="avatar" aria-hidden="true">{{ obtenerIniciales(profesorSeleccionado) }}</div>
+            <div>
+              <h1>{{ obtenerNombreCompleto(profesorSeleccionado) }}</h1>
+              <span class="chip chip-rol">{{ profesorSeleccionado.rol === 'admin' ? 'Admin' : 'Profesor' }}</span>
+            </div>
+          </div>
+          <dl class="datos">
+            <div><dt>Correo</dt><dd>{{ profesorSeleccionado.email }}</dd></div>
+            <div><dt>Aula</dt><dd>{{ profesorSeleccionado.aula || 'Sin indicar' }}</dd></div>
+            <div><dt>Curso</dt><dd>{{ profesorSeleccionado.curso || 'Sin indicar' }}</dd></div>
+            <div><dt>Fecha de nacimiento</dt><dd>{{ formatearFecha(profesorSeleccionado.nacimiento) }}</dd></div>
+          </dl>
+          <div class="acciones">
+            <a class="btn btn-lima" [routerLink]="['/admin', 'profesores', 'editar']" [queryParams]="{ correo: profesorSeleccionado.email }">Editar profesor</a>
+            <a class="btn btn-claro" [routerLink]="['/admin', 'profesores', 'borrar']" [queryParams]="{ correo: profesorSeleccionado.email }">Borrar profesor</a>
+          </div>
+        </section>
+       } @else {
+        <section class="panel">
+          <h1>No encontramos esa ficha</h1>
+          <p>Es posible que se haya eliminado. Busca otra persona por su correo desde el inicio.</p>
+          <a routerLink="/" class="btn btn-lima">Ir al inicio</a>
+        </section>
+       }
+      }
+    </main>
+  

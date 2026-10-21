@@ -1,0 +1,99 @@
+    <main class="page estrecha">
+      <a routerLink="/" class="volver">Volver al inicio</a>
+      <h1>{{ tituloFormulario }}</h1>
+
+      <form class="panel formulario" (ngSubmit)="guardarFormulario()" novalidate>
+        @if (accionGestion !== 'nuevo') {
+          <div class="campo">
+            <label for="f-buscar">Correo del {{ nombreSingular }}</label>
+            <input id="f-buscar" name="buscar" type="email" list="lista-personas-correo" autocomplete="off"
+                   [(ngModel)]="datosFormulario.email" (ngModelChange)="alCambiarCorreo()" placeholder="Empieza a escribir el correo" />
+            <datalist id="lista-personas-correo">
+              @for (personaCorreo of personasDisponiblesPorCorreo; track personaCorreo.email) { <option [value]="personaCorreo.email">{{ personaCorreo.etiqueta }}</option> }
+            </datalist>
+          </div>
+        }
+
+        @if (accionGestion === 'borrar') {
+          @if (personaSeleccionada) {
+            <p class="resumen"><strong>{{ nombrePersonaSeleccionada }}</strong> se eliminará de forma definitiva.</p>
+          }
+        } @else if (accionGestion === 'nuevo' || personaSeleccionada) {
+          <div class="fila-3">
+            <div class="campo"><label for="f-nombre">Nombre</label><input id="f-nombre" name="nombre" [(ngModel)]="datosFormulario.nombre" /></div>
+            <div class="campo"><label for="f-ap1">Primer apellido</label><input id="f-ap1" name="apellido1" [(ngModel)]="datosFormulario.apellido1" /></div>
+            <div class="campo"><label for="f-ap2">Segundo apellido</label><input id="f-ap2" name="apellido2" [(ngModel)]="datosFormulario.apellido2" /></div>
+          </div>
+
+          @if (accionGestion === 'nuevo') {
+            <div class="campo"><label for="f-email">Correo</label><input id="f-email" name="email" type="email" [(ngModel)]="datosFormulario.email" /></div>
+          }
+          @if (tipoPersona === 'alumnos') {
+            <div class="fila-2">
+              <div class="campo"><label for="f-codigo">Código</label><input id="f-codigo" name="codigo" inputmode="numeric" [(ngModel)]="datosFormulario.codigo" /></div>
+              <div class="campo"><label for="f-nac">Fecha de nacimiento</label><input id="f-nac" name="nacimiento" type="date" [(ngModel)]="datosFormulario.nacimiento" /></div>
+            </div>
+            <label class="campo check">
+              <input name="susceptible" type="checkbox" [(ngModel)]="datosFormulario.susceptible" />
+              <span>Alumno susceptible</span>
+            </label>
+
+            <div
+              class="dropzone"
+              [class.dragging]="arrastrandoArchivo"
+              [class.con-archivo]="archivoSeleccionado"
+              (dragover)="alArrastrarArchivo($event)"
+              (dragleave)="alDejarZonaArchivo($event)"
+              (drop)="alSoltarArchivo($event)"
+              (click)="fileInput.click()">
+
+              @if (archivoSeleccionado; as archivoActual) {
+                <p class="dz-titulo">📄 {{ archivoActual.name }}</p>
+                <p class="dz-ayuda">{{ (archivoActual.size / 1024).toFixed(1) }} KB</p>
+                <button type="button" class="btn btn-claro"               (click)="quitarArchivoSeleccionado($event, fileInput)">Quitar</button>
+              } @else {
+                <p class="dz-titulo">Arrastra aquí tu CSV o haz clic para elegirlo</p>
+                <p class="dz-ayuda">Solo archivos .csv</p>
+              }
+
+              <input #fileInput type="file" accept=".csv" hidden (change)="alElegirArchivo($event)">
+            </div>
+
+          } @else {
+            <div class="fila-2">
+              <div class="campo"><label for="f-aula">Aula</label><input id="f-aula" name="aula" [(ngModel)]="datosFormulario.aula" /></div>
+              <div class="campo"><label for="f-curso">Curso</label><input id="f-curso" name="curso" [(ngModel)]="datosFormulario.curso" /></div>
+            </div>
+            <div class="fila-2">
+              <div class="campo"><label for="f-nac">Fecha de nacimiento</label><input id="f-nac" name="nacimiento" type="date" [(ngModel)]="datosFormulario.nacimiento" /></div>
+              <div class="campo">
+                <label for="f-rol">Rol</label>
+                <select id="f-rol" name="rol" [(ngModel)]="datosFormulario.rol">
+                  <option value="profe">Profesor (solo envía alumnos al baño)</option>
+                  <option value="admin">Admin (puede modificar datos)</option>
+                </select>
+              </div>
+            </div>
+          }
+        }
+
+
+        @if (mensajeEstado; as mensajeActual) {
+          <p class="msg" [class.msg-ok]="mensajeActual.tipo === 'ok'" [class.msg-error]="mensajeActual.tipo === 'error'"
+             [attr.role]="mensajeActual.tipo === 'error' ? 'alert' : 'status'">{{ mensajeActual.texto }}</p>
+        }
+
+        <div class="acciones">
+          @if (accionGestion === 'borrar' && requiereConfirmacion) {
+            <p class="aviso-borrar" role="alert">¿Seguro? No se puede deshacer.</p>
+            <button type="submit" class="btn btn-peligro">Sí, eliminar</button>
+            <button type="button" class="btn btn-claro" (click)="requiereConfirmacion = false">Cancelar</button>
+          } @else {
+            <button type="submit" class="btn" [class.btn-peligro]="accionGestion === 'borrar'" [class.btn-lima]="accionGestion !== 'borrar'"
+                    [disabled]="accionGestion !== 'nuevo' && !personaSeleccionada">{{ textoBotonPrincipal }}</button>
+            <a routerLink="/" class="btn btn-claro">Cancelar</a>
+          }
+        </div>
+      </form>
+    </main>
+  

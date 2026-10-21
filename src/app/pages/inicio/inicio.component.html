@@ -1,0 +1,86 @@
+    <main class="page home">
+      @if (sesionService.esAdmin) {
+        <section class="admin-barra" aria-label="Herramientas de administración">
+          <form class="buscador" (ngSubmit)="irAFichaPorCorreo()">
+            <div class="campo">
+              <label for="buscar-correo">Buscar por correo</label>
+              <input id="buscar-correo" name="correo" list="lista-correos" autocomplete="off"
+                     [(ngModel)]="correoBuscado" placeholder="Empieza a escribir un correo" />
+              <datalist id="lista-correos">
+                @for (personaCorreo of datosService.correos; track personaCorreo.tipo + personaCorreo.id) {
+                  <option [value]="personaCorreo.email">{{ personaCorreo.etiqueta }}</option>
+                }
+              </datalist>
+            </div>
+            <button class="btn btn-oscuro" type="submit">Ver ficha</button>
+          </form>
+          <a routerLink="/estadisticas" class="btn btn-oscuro">Estadísticas generales</a>
+          @if (errorBusquedaCorreo) {
+            <p class="msg msg-error admin-error" role="alert">{{ errorBusquedaCorreo }}</p>
+          }
+        </section>
+      }
+
+      <div class="col">
+        <section class="escaner" aria-labelledby="t-escaner">
+          <h1 id="t-escaner">Código del alumno</h1>
+          <form class="escaner-form" (ngSubmit)="buscarAlumnoPorCodigo()">
+            <input  name="codigo" [(ngModel)]="codigoAlumno" inputmode="numeric" autocomplete="off"
+                   aria-label="Código del alumno" placeholder="Escanea o escribe el código" />
+            <button class="btn btn-lima" type="submit">Buscar</button>
+          </form>
+          @if (mensajeError) { <p class="msg msg-error" role="alert">{{ mensajeError }}</p> }
+          @if (mensajeAviso) { <p class="msg msg-ok" role="status">{{ mensajeAviso }}</p> }
+          <!-- Quitar cuando haya base de datos -->
+          <p class="pista">Códigos de prueba: 1001 a 1006</p>
+        </section>
+
+        @if (alumnoSeleccionado; as alumnoActualSeleccionado) {
+          <section class="panel ficha" aria-label="Ficha del alumno">
+            <div class="ficha-cab">
+              <div class="avatar" aria-hidden="true">{{ obtenerIniciales(alumnoActualSeleccionado) }}</div>
+              <div>
+                <h2>{{ obtenerNombreCompleto(alumnoActualSeleccionado) }}</h2>
+                @if (alumnoActualSeleccionado.susceptible) { <span class="chip chip-alerta">Susceptible</span> }
+              </div>
+            </div>
+            <dl class="datos">
+              <div><dt>Permiso del profesor</dt><dd>{{ sesionService.user ? obtenerNombreCompleto(sesionService.user!) : '' }}</dd></div>
+              <div><dt>Susceptible</dt><dd [class.texto-alerta]="alumnoActualSeleccionado.susceptible">{{ alumnoActualSeleccionado.susceptible ? 'Sí' : 'No' }}</dd></div>
+              <div><dt>Fecha de nacimiento</dt><dd>{{ formatearFecha(alumnoActualSeleccionado.nacimiento) }}</dd></div>
+              <div><dt>Salidas registradas</dt><dd>{{ datosService.totalSalidasDe(alumnoActualSeleccionado.id) }}</dd></div>
+              @if (salidaAbiertaAlumno; as salidaAbiertaActual) {
+                <div><dt>Hora de entrada</dt><dd>{{ salidaAbiertaActual.horaEntrada | date: 'HH:mm' }}</dd></div>
+              }
+            </dl>
+            <div class="acciones">
+              <button  type="button" class="btn btn-lima btn-grande" (click)="confirmarAccionAlumno()">
+                {{ salidaAbiertaAlumno ? 'Registrar salida' : 'Enviar al baño' }}
+              </button>
+              <button type="button" class="btn btn-claro" (click)="limpiarFormulario()">Cancelar</button>
+            </div>
+          </section>
+        }
+      </div>
+
+      <aside class="col" aria-labelledby="t-fuera">
+        <h2 id="t-fuera">En el baño ahora <span class="contador">{{ alumnosEnBano.length }}</span></h2>
+        @if (alumnosEnBano.length === 0) {
+          <p class="vacio">Nadie ha salido de clase. Escanea un código para registrar una salida.</p>
+        }
+        <ul class="fuera-lista">
+          @for (registroSalidaAbierta of alumnosEnBano; track registroSalidaAbierta.salida.id) {
+            <li class="tarjeta-fuera" [class.largo]="registroSalidaAbierta.minutosFuera >= 10">
+              <div class="avatar peq" aria-hidden="true">{{ obtenerIniciales(registroSalidaAbierta.alumno) }}</div>
+              <div>
+                <strong>{{ obtenerNombreCompleto(registroSalidaAbierta.alumno) }}</strong>
+                <div class="detalle">Entrada a las {{ registroSalidaAbierta.salida.horaEntrada | date: 'HH:mm' }}</div>
+              </div>
+              <div class="tiempo" [attr.aria-label]="registroSalidaAbierta.minutosFuera + ' minutos fuera'">{{ registroSalidaAbierta.minutosFuera }} min</div>
+              <button type="button" class="btn btn-claro" (click)="registrarVuelta(registroSalidaAbierta.salida.id, registroSalidaAbierta.alumno.nombre)">Registrar salida</button>
+            </li>
+          }
+        </ul>
+      </aside>
+    </main>
+  

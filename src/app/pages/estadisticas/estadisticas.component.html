@@ -1,0 +1,41 @@
+    <main class="page">
+      <a routerLink="/" class="volver">Volver al inicio</a>
+      <h1>Estadísticas generales</h1>
+
+      <section class="cifras" aria-label="Resumen de hoy">
+        <div class="cifra"><span class="cifra-n">{{ totalSalidas }}</span><span>salidas registradas</span></div>
+        <div class="cifra"><span class="cifra-n">{{ duracionMediaMinutos }} min</span><span>duración media</span></div>
+        <div class="cifra"><span class="cifra-n">{{ datosService.salidasAbiertas.length }}</span><span>en el baño ahora</span></div>
+      </section>
+
+      <div class="dos-col">
+        <section class="panel" aria-labelledby="t-horas">
+          <h2 id="t-horas">Salidas por hora</h2>
+          <div class="barras">
+            @for (registroHora of salidasPorHora; track registroHora.hora) {
+              <div class="barra-fila">
+                <span>{{ registroHora.hora }}:00</span>
+                <div class="pista-barra"><span [style.width.%]="(registroHora.cantidadSalidas / maxSalidasPorHora) * 100"></span></div>
+                <strong>{{ registroHora.cantidadSalidas }}</strong>
+              </div>
+            }
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="t-top">
+          <h2 id="t-top">Alumnos con más salidas</h2>
+          <table class="tabla">
+            <thead><tr><th scope="col">Alumno</th><th scope="col">Salidas</th></tr></thead>
+            <tbody>
+              @for (registroAlumno of rankingAlumnos; track registroAlumno.alumno.id) {
+                <tr>
+                  <td>{{ obtenerNombreCompleto(registroAlumno.alumno) }} @if (registroAlumno.alumno.susceptible) { <span class="chip chip-alerta">Susceptible</span> }</td>
+                  <td>{{ registroAlumno.cantidadSalidas }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </main>
+  

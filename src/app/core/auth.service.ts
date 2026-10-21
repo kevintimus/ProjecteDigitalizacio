@@ -1,40 +1,44 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { DataService } from './data.service';
+import { Profesor } from './models';
 
-const CLAVE = 'bany-profesor-id';
+const CLAVE_SESION = 'bany-profesor-id';
 
-/**
- * Sesión de demostración: se elige un profesor por correo.
- * TODO: sustituir por login real contra tu API (token/cookie).
- */
+/** Gestiona el inicio y cierre de sesión de demostración. */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private data = inject(DataService);
-  private userId = signal<number | null>(this.recuperar());
+  private idUsuarioSesion: number | null;
 
-  readonly user = computed(() => {
-    const id = this.userId();
-    return id === null ? null : (this.data.profesor(id) ?? null);
-  });
-  readonly esAdmin = computed(() => this.user()?.rol === 'admin');
+  constructor(private datosService: DataService) {
+    this.idUsuarioSesion = this.recuperarIdSesion();
+  }
 
-  login(email: string): boolean {
-    const p = this.data.buscarPorCorreo('profesores', email);
-    if (!p) return false;
-    this.userId.set(p.id);
-    try { sessionStorage.setItem(CLAVE, String(p.id)); } catch { /* sin almacenamiento */ }
+  get user(): Profesor | null {
+    if (this.idUsuarioSesion === null) return null;
+    return this.datosService.profesor(this.idUsuarioSesion) ?? null;
+  }
+
+  get esAdmin(): boolean {
+    return this.user?.rol === 'admin';
+  }
+
+  login(correo: string): boolean {
+    const profesor = this.datosService.buscarPorCorreo('profesores', correo) as Profesor | undefined;
+    if (!profesor) return false;
+    this.idUsuarioSesion = profesor.id;
+    try { sessionStorage.setItem(CLAVE_SESION, String(profesor.id)); } catch { /* El navegador puede bloquear el almacenamiento. */ }
     return true;
   }
 
   logout(): void {
-    this.userId.set(null);
-    try { sessionStorage.removeItem(CLAVE); } catch { /* sin almacenamiento */ }
+    this.idUsuarioSesion = null;
+    try { sessionStorage.removeItem(CLAVE_SESION); } catch { /* El navegador puede bloquear el almacenamiento. */ }
   }
 
-  private recuperar(): number | null {
+  private recuperarIdSesion(): number | null {
     try {
-      const v = Number(sessionStorage.getItem(CLAVE));
-      return v > 0 ? v : null;
+      const idGuardado = Number(sessionStorage.getItem(CLAVE_SESION));
+      return idGuardado > 0 ? idGuardado : null;
     } catch {
       return null;
     }

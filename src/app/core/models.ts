@@ -32,14 +32,14 @@ export interface Salida {
   horaSalida?: Date;
 }
 
-export const nombreCompleto = (p: Persona): string =>
-  [p.nombre, p.apellido1, p.apellido2].filter(Boolean).join(' ');
+export const obtenerNombreCompleto = (persona: Persona): string =>
+  [persona.nombre, persona.apellido1, persona.apellido2].filter(Boolean).join(' ');
 
-export const iniciales = (p: Persona): string =>
-  ((p.nombre[0] ?? '') + (p.apellido1[0] ?? '')).toUpperCase();
+export const obtenerIniciales = (persona: Persona): string =>
+  ((persona.nombre[0] ?? '') + (persona.apellido1[0] ?? '')).toUpperCase();
 
-export const fechaLarga = (iso: string): string => {
-  if (!iso) return 'Sin indicar';
-  const [y, m, d] = iso.split('-');
-  return `${d}/${m}/${y}`;
+export const formatearFecha = (fechaISO: string): string => {
+  if (!fechaISO) return 'Sin indicar';
+  const [anio, mes, dia] = fechaISO.split('-');
+  return `${dia}/${mes}/${anio}`;
 };
