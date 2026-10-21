@@ -71,7 +71,8 @@ app.post('/api/AfegirProfe', async (req, res) => {
 
 app.post('/api/AfegirRegistreLavabo', async (req, res) => {
   try {
-    const reg = await registreLavabo
+    const reg = await registreLavabo.create(req.body)
+    res.status(201).json(reg)
   } catch (error) {
     console.error("Error en el post /api/AfegirRegistreLavabo");
     console.error(error);
