@@ -2,18 +2,16 @@
       <header class="topbar">
         <a routerLink="/" class="marca" aria-label="Ir al inicio">
           <!-- Sustituye este SVG por tu logo -->
-          <svg class="marca-logo" viewBox="0 0 40 40" aria-hidden="true">
-            <rect width="40" height="40" rx="10" fill="#A4D279" />
-            <rect x="11" y="8" width="18" height="24" rx="3" fill="#1C541D" />
-            <circle cx="25" cy="21" r="1.8" fill="#E0D0A3" />
-          </svg>
-          <span>Baño</span>
+          <img src="logovidre.png" height="50" width="175">
         </a>
 
         @if (sesionService.esAdmin) {
           <nav class="admin-nav" aria-label="Administración">
+
+            <!-- Botones de Profesores y Alumnos -->
             @for (tipoPersonaMenu of menuTiposPersona; track tipoPersonaMenu.tipo) {
               <div class="menu">
+
                 <button
                   type="button"
                   class="btn btn-claro"
@@ -23,24 +21,55 @@
                 >
                   {{ tipoPersonaMenu.etiqueta }}
                 </button>
+
                 @if (tipoMenuAbierto === tipoPersonaMenu.tipo) {
                   <div class="menu-lista">
                     @for (accionGestion of accionesGestion; track accionGestion.ruta) {
-                      <a [routerLink]="['/admin', tipoPersonaMenu.tipo, accionGestion.ruta]" (click)="cerrar()">{{ accionGestion.etiqueta }}</a>
+                      <a
+                        [routerLink]="['/admin', tipoPersonaMenu.tipo, accionGestion.ruta]"
+                        (click)="cerrar()"
+                      >
+                        {{ accionGestion.etiqueta }}
+                      </a>
                     }
                   </div>
                 }
+
               </div>
             }
+
+            <!-- Nuevo botón para importar archivos -->
+            <a
+              class="btn btn-claro"
+              routerLink="/admin/importar"
+            >
+              Importar archivos
+            </a>
+
           </nav>
         }
 
+        <!-- Información del usuario y botón para salir -->
         <div class="usuario">
-          <span class="usuario-nombre">{{ obtenerNombreCompleto(usuarioActual) }}</span>
-          <span class="chip chip-rol">{{ sesionService.esAdmin ? 'Admin' : 'Profesor' }}</span>
-          <button type="button" class="btn btn-claro" (click)="salir()">Salir</button>
+      <span class="usuario-nombre">
+        {{ obtenerNombreCompleto(usuarioActual) }}
+      </span>
+
+          <span class="chip chip-rol">
+        {{ sesionService.esAdmin ? 'Admin' : 'Profesor' }}
+      </span>
+
+          <button
+            type="button"
+            class="btn btn-claro"
+            (click)="salir()"
+          >
+            Salir
+          </button>
         </div>
+
       </header>
     }
+
     <router-outlet />
-  
+

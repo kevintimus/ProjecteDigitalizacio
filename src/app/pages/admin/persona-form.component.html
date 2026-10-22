@@ -38,27 +38,6 @@
               <span>Alumno susceptible</span>
             </label>
 
-            <div
-              class="dropzone"
-              [class.dragging]="arrastrandoArchivo"
-              [class.con-archivo]="archivoSeleccionado"
-              (dragover)="alArrastrarArchivo($event)"
-              (dragleave)="alDejarZonaArchivo($event)"
-              (drop)="alSoltarArchivo($event)"
-              (click)="fileInput.click()">
-
-              @if (archivoSeleccionado; as archivoActual) {
-                <p class="dz-titulo">📄 {{ archivoActual.name }}</p>
-                <p class="dz-ayuda">{{ (archivoActual.size / 1024).toFixed(1) }} KB</p>
-                <button type="button" class="btn btn-claro"               (click)="quitarArchivoSeleccionado($event, fileInput)">Quitar</button>
-              } @else {
-                <p class="dz-titulo">Arrastra aquí tu CSV o haz clic para elegirlo</p>
-                <p class="dz-ayuda">Solo archivos .csv</p>
-              }
-
-              <input #fileInput type="file" accept=".csv" hidden (change)="alElegirArchivo($event)">
-            </div>
-
           } @else {
             <div class="fila-2">
               <div class="campo"><label for="f-aula">Aula</label><input id="f-aula" name="aula" [(ngModel)]="datosFormulario.aula" /></div>
@@ -96,4 +75,4 @@
         </div>
       </form>
     </main>
-  
+
