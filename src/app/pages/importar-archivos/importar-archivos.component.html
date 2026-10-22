@@ -2,6 +2,7 @@
   class="dropzone"
   [class.dragging]="arrastrandoArchivo"
   [class.con-archivo]="archivoSeleccionado"
+  (dragenter)="alArrastrarArchivo($event)"
   (dragover)="alArrastrarArchivo($event)"
   (dragleave)="alDejarZonaArchivo($event)"
   (drop)="alSoltarArchivo($event)"
@@ -9,12 +10,22 @@
 
   @if (archivoSeleccionado; as archivoActual) {
     <p class="dz-titulo">📄 {{ archivoActual.name }}</p>
-    <p class="dz-ayuda">{{ (archivoActual.size / 1024).toFixed(1) }} KB</p>
-    <button type="button" class="btn btn-claro"               (click)="quitarArchivoSeleccionado($event, fileInput)">Quitar</button>
+    <p class="dz-ayuda">
+      {{ (archivoActual.size / 1024).toFixed(1) }} KB
+    </p>
+
+    <button type="button" class="btn btn-claro" (click)="quitarArchivoSeleccionado($event, fileInput)"> Quitar </button>
   } @else {
-    <p class="dz-titulo">Arrastra aquí tu CSV o haz clic para elegirlo</p>
+    <p class="dz-titulo">
+      Arrastra aquí tu CSV o haz clic para elegirlo
+    </p>
     <p class="dz-ayuda">Solo archivos .csv</p>
   }
 
-  <input #fileInput type="file" accept=".csv" hidden (change)="alElegirArchivo($event)">
+  <input
+    #fileInput type="file" accept=".csv" hidden (change)="alElegirArchivo($event)">
+
 </div>
+@if (archivoSeleccionado) {
+  <button type="button" class="btn btn-claro" (click)="verContenidoArchivo()"> Ver contenido del CSV </button>
+}

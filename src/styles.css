@@ -182,35 +182,38 @@ input:focus, select:focus { border-color: var(--bosque); outline: none; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
-.dropzone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  margin: 1rem 0;
-  padding: 2rem 1rem;
-  border: 2px dashed #b9b9a8;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.6);
-  color: #555;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s, transform 0.15s;
-}
+
+ .dropzone {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 0.25rem;
+   margin: 1rem 0;
+   padding: 2rem 1rem;
+   min-height: 180px;
+   border: 2px dashed #b9b9a8;
+   border-radius: 12px;
+   background: rgba(255, 255, 255, 0.6);
+   color: #555;
+   text-align: center;
+   cursor: pointer;
+   transition: border-color 0.15s, background 0.15s, transform 0.15s;
+ }
 
 .dropzone p {
-  margin: 0;
+margin: 0;
 }
 
 .dropzone:hover,
 .dropzone:focus-visible {
-  border-color: #8cbf55;
-  background: rgba(165, 211, 122, 0.12);
+border-color: #8cbf55;
+background: rgba(165, 211, 122, 0.12);
 }
 
 .dropzone.dragging {
-  border-color: #6fa83a;
-  background: rgba(165, 211, 122, 0.25);
-  transform: scale(1.01);
+border-color: #6fa83a;
+background: rgba(165, 211, 122, 0.25);
+transform: scale(1.01);
 }
+
