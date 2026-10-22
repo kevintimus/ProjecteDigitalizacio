@@ -22,24 +22,158 @@ const dbSQL = crearConfigBaseDades();
 const { alumnes, grups, professors, registreLavabo } = initModels(dbSQL);
 
 //________________________ OBTENIR DADES (GET) ________________________
+
+//-----------------------------------------------
+//------------------- ALUMNES -------------------
+//-----------------------------------------------
+app.get('/api/getAlumnes', async (req, res) => {
+  try {
+    const alum = await alumnes.findAll()
+    res.json(alum)
+  } catch (error) {
+    console.error("Error en el get /api/getAlumnes");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al obtenir Alumnes",
+      error: error.message
+    })
+  }
+})
+
 app.get('/api/getAlumnes/:id', async (req, res) => {
-  const alum = await alumnes.findByPk(req.params.id)
-  res.json(alum)
+  try {
+    const alum = await alumnes.findByPk(req.params.id)
+    res.json(alum)
+  } catch (error) {
+    console.error("Error en el get /api/getAlumnes/:id");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al obtenir un alumne",
+      error: error.message
+    })
+  }
 })
 
 //INFO QUE ES VEURÀ UN COP ES REGISTRI A UN ALUMNE
 app.get('/api/getAlumnes/registre/:id', async (req, res) => {
-  const alum = await alumnes.findByPk(req.params.id, {
-    attributes: ['nom_alum', 'cog1_alum', 'cog2_alum', 'foto_alum', 'susceptible']
-  })
-  res.json(alum)
+  try {
+    const alum = await alumnes.findByPk(req.params.id, {
+      attributes: ['nom_alum', 'cog1_alum', 'cog2_alum', 'foto_alum', 'susceptible']
+    })
+    res.json(alum)
+  } catch (error) {
+    console.error("Error en el get /api/getAlumnes/registre/:id");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al obtenir l'alumne",
+      error: error.message
+    })
+  }
+})
+
+//-----------------------------------------------
+//----------------- PROFESSORS ------------------
+//-----------------------------------------------
+app.get('/api/getProfe', async (req, res) => {
+  try {
+    const prof = await professors.findAll()
+    res.json(prof)
+  } catch (error) {
+    console.error("Error en el get /api/getProfe");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al obtenir Professors",
+      error: error.message
+    })
+  }
 })
 
 app.get('/api/getProfe/:id', async (req, res) => {
-  const prof = await professors.findByPk(req.params.id)
-  res.json(prof)
+  try {
+    const prof = await professors.findByPk(req.params.id)
+    res.json(prof)
+  } catch (error) {
+    console.error("Error en el get /api/getProfe/:id");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al obtenir un Professor",
+      error: error.message
+    })
+  }
+})
+
+//-----------------------------------------------
+//------------------ REGISTRES ------------------
+//-----------------------------------------------
+app.get('/api/getRegistreLavabo', async (req, res) => {
+  try {
+    const regis = await registreLavabo.findAll()
+    res.json(regis)
+  } catch (error) {
+    console.error("Error en el get /api/getRegistreLavabo");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al obtenir registres",
+      error: error.message
+    })
+  }
+})
+
+app.get('/api/getRegistreLavabo/oberts', async (req, res) => {
+  try {
+    const regis = await registreLavabo.findAll({
+      where: {
+        hora_sortida: null
+      }
+    })
+    res.json(regis)
+  } catch (error) {
+    console.error("Error en el get /api/getRegistreLavabo/oberts");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al obtenir registres oberts",
+      error: error.message
+    })
+  }
+})
+
+//-----------------------------------------------
+//-------------------- GRUPS --------------------
+//-----------------------------------------------
+
+app.get('/api/getGrups', async (req, res) => {
+  try {
+    const grup = await grups.findAll()
+    res.json(grup)
+  } catch (error) {
+    console.error("Error en el get /api/getGrups");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al obtenir Grups",
+      error: error.message
+    })
+  }
+})
+
+app.get('/api/getGrups/:id', async (req,res) => {
+  try {
+    const grup = await grups.findByPk(req.params.id)
+    res.json(grup)
+  } catch (error) {
+    console.error("Error en el get /api/getGrups/:id");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al obtenir un grup",
+      error: error.message
+    })
+  }
+
 })
 //________________________ CREAR DADES (POST) ________________________
+
+//-----------------------------------------------
+//------------------- ALUMNES -------------------
+//-----------------------------------------------
 
 app.post('/api/AfegirAlumne', async (req, res) => {
   try {
@@ -55,6 +189,10 @@ app.post('/api/AfegirAlumne', async (req, res) => {
   }
 })
 
+//-----------------------------------------------
+//----------------- PROFESSORS ------------------
+//-----------------------------------------------
+
 app.post('/api/AfegirProfe', async (req, res) => {
   try {
     const prof = await professors.create(req.body)
@@ -68,6 +206,10 @@ app.post('/api/AfegirProfe', async (req, res) => {
     })
   }
 })
+
+//-----------------------------------------------
+//------------------ REGISTRES ------------------
+//-----------------------------------------------
 
 app.post('/api/AfegirRegistreLavabo', async (req, res) => {
   try {
@@ -83,11 +225,115 @@ app.post('/api/AfegirRegistreLavabo', async (req, res) => {
   }
 })
 
-//________________________ MODIFICAR DADES (PUT) ________________________
+//-----------------------------------------------
+//-------------------- GRUPS --------------------
+//-----------------------------------------------
 
-app.put('/api/ModificarAlumne', async (req, res) => {
-
+app.post('/api/AfegirGrups', async (req, res) => {
+  try {
+    const grup = await grups.create(req.body)
+    res.status(201).json(reg)
+  } catch (error) {
+    console.error("Error en el post /api/AfegirGrups");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al afegir un grup",
+      error: error.message
+    })
+  }
 })
 
+//________________________ MODIFICAR DADES (PUT) ________________________
 
+//-----------------------------------------------
+//------------------- ALUMNES -------------------
+//-----------------------------------------------
+app.put('/api/ModificarAlumne/:id', async (req, res) => {
+  try{
+    const alum = alumnes.findByPk(req.params.id)
+    if (!alum) {
+      return res.status(404).json({
+        mensaje: "Alumne no trobat"
+      })
+    }
+    await alum.update({
+      nom_alum: req.body.nom_alum,
+      cog1_alum: req.body.cog1_alum,
+      cog2_alum: req.body.cog2_alum,
+      foto_alum: req.body.foto_alum,
+      correu_alum: req.body.correu_alum,
+      susceptible: req.body.susceptible,
+      id_grup: req.body.id_grup
+    });
+    res.json(alum);
+  } catch (error) {
+    console.error("Error en el put /api/ModificarAlumne/:id");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al modificar l'alumne",
+      error: error.message
+    });
+  }
+})
+
+//-----------------------------------------------
+//----------------- PROFESSORS ------------------
+//-----------------------------------------------
+
+app.put('/api/ModificarProfessor/:id', async (req, res) => {
+  try {
+    const profe = await professors.findByPk(req.params.id)
+
+    if (!profe) {
+      res.status(404).json({
+        mensaje: "Professor no trobat",
+      })
+    }
+    await profe.update({
+      nom_prof: req.body.nom_prof,
+      cog1_prof: req.body.cog1_prof,
+      cog2_prof: req.body.cog2_prof,
+      correu: req.body.correu,
+      admin: req.body.admin
+    })
+    res.json(profe)
+  } catch (error) {
+    console.error("Error en el put /api/ModificarProfessor/:id");
+    console.error(error);
+    res.status(500).json({
+      mensaje: 'Error al modificar el professor',
+      error: error.message
+    });
+  }
+})
+
+//-----------------------------------------------
+//-------------------- GRUPS --------------------
+//-----------------------------------------------
+
+app.put('/api/ModificarGrup/:id', async (req, res) => {
+  try {
+    const grup = await grups.findByPk(req.params.id)
+
+    if (!grup) {
+      res.status(404).json({
+        mensaje: "Grup no trobat"
+      })
+    }
+    await grup.update({
+      curs: req.body.curs,
+      grup: req.body.grup
+    })
+
+    res.json(grup);
+
+  } catch (error) {
+    console.error("Error en el put /api/ModificarGrup/:id");
+    console.error(error);
+    res.status(500).json({
+      mensaje: 'Error al modificar el grup',
+      error: error.message
+    })
+  }
+})
 app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
