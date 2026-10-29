@@ -20,10 +20,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       references: {
         model: 'professors',
-        key: 'id_ieduca_prof'
+        key: 'id_ieducat_prof'
       }
     },
-    id_grup: {
+    codi_grup_mat: {
       type: DataTypes.STRING(50),
       allowNull: false,
       references: {

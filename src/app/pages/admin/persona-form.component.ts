@@ -191,12 +191,12 @@ class PersonaFormComponent {
     if (this.tipoPersona === 'alumnos') {
       this.datosFormulario = {
         nombre: '', apellido1: '', apellido2: '', email: '', codigo: '',
-        nacimiento: '', susceptible: false,
+        susceptible: false,
       };
     } else {
       this.datosFormulario = {
         nombre: '', apellido1: '', apellido2: '', email: '', aula: '', curso: '',
-        nacimiento: '', rol: 'profe',
+        rol: 'profe',
       };
     }
   }

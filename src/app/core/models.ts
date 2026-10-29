@@ -8,7 +8,6 @@ export interface Persona {
   apellido2: string;
   email: string;
   /** Formato ISO yyyy-mm-dd (el que usa <input type="date">) */
-  nacimiento: string;
 }
 
 export interface Profesor extends Persona {
@@ -19,6 +18,7 @@ export interface Profesor extends Persona {
 
 export interface Alumno extends Persona {
   codigo: string;
+  foto: string;
   susceptible: boolean;
 }
 
