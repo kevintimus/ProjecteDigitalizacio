@@ -1,5 +1,6 @@
-
+import * as XLSX from 'xlsx';
 import { Component } from '@angular/core';
+import {Alumno} from '../../core/models';
 
 @Component({
   selector: 'app-importar-archivos',
@@ -44,12 +45,14 @@ export class ImportarArchivosComponent {
   }
 
   protected validarArchivoSeleccionado(archivo: File): void {
-    if (archivo.name.toLowerCase().endsWith('.csv' || archivo.name.toLowerCase().endsWith('.xls'))) {
+    const nombreArchivo = archivo.name.toLowerCase();
+
+    if (nombreArchivo.endsWith('.xls') || nombreArchivo.endsWith('.xlsx')) {
       this.archivoSeleccionado = archivo;
       this.mensajeError = '';
     } else {
       this.archivoSeleccionado = null;
-      this.mensajeError = 'El archivo debe tener extensión .csv o .xls.';
+      this.mensajeError = 'El archivo debe ser .xls o .xlsx.';
     }
   }
 
@@ -72,11 +75,52 @@ export class ImportarArchivosComponent {
 
     const lectorArchivo = new FileReader();
 
-    lectorArchivo.onload = () => {
-      console.log(lectorArchivo.result);
+    lectorArchivo.onload = (evento) => {
+      const contenido = evento.target?.result;
+
+      if (contenido instanceof ArrayBuffer) {
+        const libroExcel = XLSX.read(contenido);
+        const nombrePrimeraHoja = libroExcel.SheetNames[0];
+
+        if (!nombrePrimeraHoja) {
+          this.mensajeError = 'El Excel no contiene hojas.';
+          return;
+        }
+
+        const hojaExcel = libroExcel.Sheets[nombrePrimeraHoja];
+
+        const filas = XLSX.utils.sheet_to_json<any>(hojaExcel);
+
+        // const alumnos: Alumno[] = filas.map((fila) => ({
+        //   nombre: fila.nom_alum,
+        //   apellido1: fila.cog1_alum ?? '',
+        //   apellido2: fila.cog2_alum ?? '',
+        //   foto: fila.foto_alum,
+        //   email: fila.correu_alum ?? '',
+        //   susceptible: fila.susceptible === 1,
+        //   codigo: fila.codi_grup_mat,
+        //
+        // }));
+        //
+        // let creados = 0;
+        // let errores = 0;
+        //
+        // for (const alumno of alumnos) {
+        //   this.alumnoService.crear(alumno).subscribe({
+        //     next: () => {
+        //       creados++;
+        //       // aquí podrías comprobar si creados + errores === alumnos.length
+        //     },
+        //     error: () => {
+        //       errores++;
+        //     }
+        //   });
+        // }
+
+      }
     };
 
-    lectorArchivo.readAsText(this.archivoSeleccionado);
-  }
+    lectorArchivo.readAsArrayBuffer(this.archivoSeleccionado);
 
+  }
 }

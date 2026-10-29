@@ -17,15 +17,14 @@
     <button type="button" class="btn btn-claro" (click)="quitarArchivoSeleccionado($event, fileInput)"> Quitar </button>
   } @else {
     <p class="dz-titulo">
-      Arrastra aquí tu CSV o haz clic para elegirlo
+      Arrastra aquí tu XLS o haz clic para elegirlo
     </p>
-    <p class="dz-ayuda">Solo archivos .csv</p>
+    <p class="dz-ayuda">Solo archivos .csv o .xls</p>
   }
 
-  <input
-    #fileInput type="file" accept=".csv" hidden (change)="alElegirArchivo($event)">
+  <input #fileInput type="file" accept=".xls,.xlsx" hidden (change)="alElegirArchivo($event)">
 
 </div>
 @if (archivoSeleccionado) {
-  <button type="button" class="btn btn-claro" (click)="verContenidoArchivo()"> Ver contenido del CSV </button>
+  <button type="button" class="btn btn-claro" (click)="verContenidoArchivo()"> Crear usuarios o profesores </button>
 }
