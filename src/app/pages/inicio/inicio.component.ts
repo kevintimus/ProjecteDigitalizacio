@@ -51,7 +51,7 @@ export class InicioComponent {
     if (!codigoIntroducido) return;
 
     this.mensajeAviso = '';
-    const alumnoEncontrado = this.datosService.alumnoPorCodigo(codigoIntroducido);
+    const alumnoEncontrado = this.datosService.alumno(Number(codigoIntroducido));
     if (!alumnoEncontrado) {
       this.alumnoSeleccionado = null;
       this.mensajeError = `No hay ningún alumno con el código ${codigoIntroducido}. Revisa el número e inténtalo de nuevo.`;

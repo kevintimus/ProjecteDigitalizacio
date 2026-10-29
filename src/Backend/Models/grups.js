@@ -24,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "codi_grup_mat" },
+          { name: "id_grup" },
         ]
       },
     ]

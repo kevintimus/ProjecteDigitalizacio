@@ -6,11 +6,11 @@
           <label for="login-correo">Profesor</label>
           <select id="login-correo" name="correo" [(ngModel)]="correoProfesor">
             @for (profesor of datosService.profesores; track profesor.id) {
-              <option [value]="profesor.email">{{ obtenerNombreCompleto(profesor) }} ({{ profesor.rol === 'admin' ? 'admin' : 'profesor' }})</option>
+              <option [value]="profesor.email">{{ obtenerNombreCompleto(profesor) }} ({{ profesor.admin ? 'admin' : 'profesor' }})</option>
             }
           </select>
         </div>
         <button type="submit" class="btn btn-lima">Entrar</button>
       </form>
     </main>
-  
+

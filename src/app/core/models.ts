@@ -1,4 +1,3 @@
-export type Rol = 'admin' | 'profe';
 export type TipoPersona = 'profesores' | 'alumnos';
 
 export interface Persona {
@@ -11,25 +10,33 @@ export interface Persona {
 }
 
 export interface Profesor extends Persona {
-  rol: Rol;
-  aula: string;
-  curso: string;
+  admin: boolean;
+  contrassenya: string;
 }
 
 export interface Alumno extends Persona {
   codigo: string;
-  foto: string;
   susceptible: boolean;
+  grup: string;
 }
 
 export interface Salida {
   id: number;
   alumnoId: number;
   profesorId: number;
+  grupId: string;
+  /** Fecha en la que el alumno ha ido al baño*/
+  data: Date;
   /** Cuando el alumno sale de clase hacia el baño */
   horaEntrada: Date;
   /** Cuando vuelve. Si no existe, el alumno sigue en el baño */
   horaSalida?: Date;
+}
+
+export interface Grupo {
+  id: string;
+  curs: string;
+  grup: string;
 }
 
 export const obtenerNombreCompleto = (persona: Persona): string =>
