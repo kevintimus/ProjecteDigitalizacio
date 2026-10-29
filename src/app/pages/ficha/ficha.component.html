@@ -12,8 +12,7 @@
           </div>
           <dl class="datos">
             <div><dt>Correo</dt><dd>{{ alumnoSeleccionado.email }}</dd></div>
-            <div><dt>Código</dt><dd>{{ alumnoSeleccionado.codigo }}</dd></div>
-            <div><dt>Fecha de nacimiento</dt><dd>{{ formatearFecha(alumnoSeleccionado.nacimiento) }}</dd></div>
+            <div><dt>Código</dt><dd>{{ alumnoSeleccionado.id }}</dd></div>
             <div><dt>Salidas registradas</dt><dd>{{ datosService.totalSalidasDe(alumnoSeleccionado.id) }}</dd></div>
           </dl>
           <div class="acciones">
@@ -28,14 +27,14 @@
             <div class="avatar" aria-hidden="true">{{ obtenerIniciales(profesorSeleccionado) }}</div>
             <div>
               <h1>{{ obtenerNombreCompleto(profesorSeleccionado) }}</h1>
-              <span class="chip chip-rol">{{ profesorSeleccionado.rol === 'admin' ? 'Admin' : 'Profesor' }}</span>
+              <span class="chip chip-rol">{{ profesorSeleccionado.admin ? 'Admin' : 'Profesor' }}</span>
             </div>
           </div>
           <dl class="datos">
             <div><dt>Correo</dt><dd>{{ profesorSeleccionado.email }}</dd></div>
-            <div><dt>Aula</dt><dd>{{ profesorSeleccionado.aula || 'Sin indicar' }}</dd></div>
+            <!--
             <div><dt>Curso</dt><dd>{{ profesorSeleccionado.curso || 'Sin indicar' }}</dd></div>
-            <div><dt>Fecha de nacimiento</dt><dd>{{ formatearFecha(profesorSeleccionado.nacimiento) }}</dd></div>
+            -->
           </dl>
           <div class="acciones">
             <a class="btn btn-lima" [routerLink]="['/admin', 'profesores', 'editar']" [queryParams]="{ correo: profesorSeleccionado.email }">Editar profesor</a>
@@ -51,4 +50,4 @@
        }
       }
     </main>
-  
+

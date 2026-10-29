@@ -19,7 +19,7 @@ export class AuthService {
   }
 
   get esAdmin(): boolean {
-    return this.user?.rol === 'admin';
+    return this.user?.admin === true;
   }
 
   login(correo: string): boolean {

@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('grups', {
-    id_grup: {
+    codi_grup_matricula: {
       type: DataTypes.STRING(50),
       allowNull: false,
       primaryKey: true

@@ -47,7 +47,6 @@
             <dl class="datos">
               <div><dt>Permiso del profesor</dt><dd>{{ sesionService.user ? obtenerNombreCompleto(sesionService.user!) : '' }}</dd></div>
               <div><dt>Susceptible</dt><dd [class.texto-alerta]="alumnoActualSeleccionado.susceptible">{{ alumnoActualSeleccionado.susceptible ? 'Sí' : 'No' }}</dd></div>
-              <div><dt>Fecha de nacimiento</dt><dd>{{ formatearFecha(alumnoActualSeleccionado.nacimiento) }}</dd></div>
               <div><dt>Salidas registradas</dt><dd>{{ datosService.totalSalidasDe(alumnoActualSeleccionado.id) }}</dd></div>
               @if (salidaAbiertaAlumno; as salidaAbiertaActual) {
                 <div><dt>Hora de entrada</dt><dd>{{ salidaAbiertaActual.horaEntrada | date: 'HH:mm' }}</dd></div>
@@ -83,4 +82,4 @@
         </ul>
       </aside>
     </main>
-  
+

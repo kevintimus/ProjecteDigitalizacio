@@ -19,7 +19,7 @@ app.use(cors({
 app.use(express.json());
 
 const dbSQL = crearConfigBaseDades();
-const { alumnes, grups, professors, registreLavabo } = initModels(dbSQL);
+const { alumnes, grups, professors, registres_lababo } = initModels(dbSQL);
 
 //________________________ OBTENIR DADES (GET) ________________________
 
@@ -107,7 +107,7 @@ app.get('/api/getProfe/:id', async (req, res) => {
 //-----------------------------------------------
 app.get('/api/getRegistreLavabo', async (req, res) => {
   try {
-    const regis = await registreLavabo.findAll()
+    const regis = await registres_lababo.findAll()
     res.json(regis)
   } catch (error) {
     console.error("Error en el get /api/getRegistreLavabo");
@@ -121,7 +121,7 @@ app.get('/api/getRegistreLavabo', async (req, res) => {
 
 app.get('/api/getRegistreLavabo/oberts', async (req, res) => {
   try {
-    const regis = await registreLavabo.findAll({
+    const regis = await registres_lababo.findAll({
       where: {
         hora_sortida: null
       }
@@ -213,7 +213,7 @@ app.post('/api/AfegirProfe', async (req, res) => {
 
 app.post('/api/AfegirRegistreLavabo', async (req, res) => {
   try {
-    const reg = await registreLavabo.create(req.body)
+    const reg = await registres_lababo.create(req.body)
     res.status(201).json(reg)
   } catch (error) {
     console.error("Error en el post /api/AfegirRegistreLavabo");
@@ -232,7 +232,7 @@ app.post('/api/AfegirRegistreLavabo', async (req, res) => {
 app.post('/api/AfegirGrups', async (req, res) => {
   try {
     const grup = await grups.create(req.body)
-    res.status(201).json(reg)
+    res.status(201).json(grup)
   } catch (error) {
     console.error("Error en el post /api/AfegirGrups");
     console.error(error);
@@ -308,6 +308,42 @@ app.put('/api/ModificarProfessor/:id', async (req, res) => {
 })
 
 //-----------------------------------------------
+//------------------ REGISTRES ------------------
+//-----------------------------------------------
+
+app.put('/api/ModificarRegistreLavabo/:id', async (req, res) => {
+  try {
+    const regis = await registres_lababo.findByPk(req.params.id);
+
+    if (!regis) {
+      return res.status(404).json({
+        mensaje: 'No s\'ha trobat el registre'
+      });
+    }
+
+    if (regis.hora_sortida) {
+      return res.status(400).json({
+        mensaje: 'Aquest registre ja està tancat'
+      });
+    }
+
+    await regis.update({
+      hora_sortida: new Date()
+    });
+
+    res.json(regis);
+
+  } catch (error) {
+    console.error('Error en el put /api/ModificarRegistreLavabo/:id');
+    console.error(error);
+    res.status(500).json({
+      mensaje: 'Error al tancar el registre',
+      error: error.message
+    });
+  }
+});
+
+//-----------------------------------------------
 //-------------------- GRUPS --------------------
 //-----------------------------------------------
 
@@ -334,6 +370,85 @@ app.put('/api/ModificarGrup/:id', async (req, res) => {
       mensaje: 'Error al modificar el grup',
       error: error.message
     })
+  }
+})
+//________________________ ELIMINAR DADES (DELETE) ________________________
+
+//-----------------------------------------------
+//------------------- ALUMNES -------------------
+//-----------------------------------------------
+
+app.delete('/api/EliminarAlumne/:id', async (req, res) => {
+  try {
+    const alum = await alumnes.findByPk(req.params.id);
+
+    if (!alum) {
+      return res.status(404).json({
+        mensaje: 'No s\'ha trobat l\'alumne'
+      });
+    }
+
+    await alum.destroy();
+
+    res.status(204).send();
+  } catch (error) {
+    console.error('Error en el delete /api/EliminarAlumne/:id');
+    console.error(error);
+    res.status(500).json({
+      mensaje: 'Error al eliminar l\'alumne',
+      error: error.message
+    });
+  }
+});
+
+//-----------------------------------------------
+//----------------- PROFESSORS ------------------
+//-----------------------------------------------
+
+app.delete('/api/EliminarProfessor/:id', async (req, res) => {
+  try {
+    const prof = await professors.findByPk(req.params.id);
+
+    if (!prof) {
+      return res.status(404).json({
+        mensaje: 'No s\'ha trobat el professor'
+      });
+    }
+
+    await prof.destroy();
+
+    res.status(204).send();
+  } catch (error) {
+    console.error('Error en el delete /api/EliminarProfessor/:id');
+    console.error(error);
+    res.status(500).json({
+      mensaje: 'Error al eliminar el professor',
+      error: error.message
+    });
+  }
+})
+
+
+app.delete('/api/EliminarGrup/:id', async (req,res) => {
+  try {
+    const grup = await grups.findByPk(req.params.id);
+
+    if (!grup) {
+      return res.status(404).json({
+        mensaje: 'No s\'ha trobat el grup'
+      });
+    }
+
+    await grup.destroy();
+
+    res.status(204).send();
+  } catch (error) {
+    console.error('Error en el delete /api/EliminarGrup/:id');
+    console.error(error);
+    res.status(500).json({
+      mensaje: 'Error al eliminar el grup',
+      error: error.message
+    });
   }
 })
 app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
