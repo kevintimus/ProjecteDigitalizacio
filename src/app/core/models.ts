@@ -15,7 +15,7 @@ export interface Profesor extends Persona {
 }
 
 export interface Alumno extends Persona {
-  codigo: string;
+  foto: string;
   susceptible: boolean;
   grup: string;
 }
