@@ -286,7 +286,7 @@ app.put('/api/ModificarAlumne/:id', async (req, res) => {
       foto_alum: req.body.foto_alum,
       correu_alum: req.body.correu_alum,
       susceptible: req.body.susceptible,
-      id_grup: req.body.id_grup
+      codi_grup_mat: req.body.codi_grup_mat
     });
     res.json(alum);
   } catch (error) {

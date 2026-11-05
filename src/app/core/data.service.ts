@@ -49,7 +49,7 @@ export class DataService {
       email: d.correu_alum,
       susceptible: Number(d.susceptible) === 1 ||
         d.susceptible === true,
-      grup: String(d.id_grup)
+      grup: String(d.codi_grup_mat)
     };
   }
 
@@ -68,7 +68,7 @@ export class DataService {
 
   private mapGrupo(d: any): Grupo {
     return {
-      id: String(d.id_grup),
+      id: String(d.codi_grup_matricula),
       curs: String(d.curs),
       grup: String(d.grup)
     };
@@ -79,7 +79,7 @@ export class DataService {
       id: Number(d.id_reg),
       alumnoId: Number(d.idecat_alum),
       profesorId: Number(d.idecat_prof),
-      grupId: String(d.id_grup),
+      grupId: String(d.codi_grup_mat),
       data: d.data ? new Date(d.data) : new Date(),
       horaEntrada: new Date(d.hora_entrada),
       horaSalida: d.hora_sortida
@@ -328,7 +328,7 @@ export class DataService {
       cog2_alum: datos.apellido2 || null,
       foto_alum: datos.foto,
       correu_alum: datos.email,
-      id_grup: datos.grup
+      codi_grup_mat: datos.grup
     };
 
     if (datos.susceptible !== undefined) {
@@ -540,10 +540,12 @@ export class DataService {
       `${String(ahora.getMonth() + 1).padStart(2, '0')}-` +
       `${String(ahora.getDate()).padStart(2, '0')}`;
 
+    console.log(alumno);
+
     const body = {
       idecat_alum: idAlumno,
       idecat_prof: idProfesor,
-      id_grup: alumno.grup,
+      codi_grup_mat: alumno.grup,
       data: fechaActual,
       hora_entrada: ahora.toISOString(),
       hora_sortida: null
