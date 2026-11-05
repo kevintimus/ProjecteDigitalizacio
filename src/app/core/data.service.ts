@@ -291,14 +291,14 @@ export class DataService {
     const body = {
       id_ieducat: Number(datos.codigo ?? datos.id),
       nom_alum: datos.nombre,
-      cog1_alum: datos.apellido1,
+      cog1_alum: datos.apellido1 || null,
       cog2_alum: datos.apellido2 || null,
       foto_alum: datos.foto || 'fotito',
       correu_alum: datos.email,
       susceptible: datos.susceptible ? 1 : 0,
-      id_grup: datos.grup
+      codi_grup_mat: datos.grup
     };
-
+    console.log('Objeto que se envía al backend:', body);
     return this.http.post<any>(
       `${this.api}/AfegirAlumne`,
       body
@@ -324,7 +324,7 @@ export class DataService {
 
     const body: any = {
       nom_alum: datos.nombre,
-      cog1_alum: datos.apellido1,
+      cog1_alum: datos.apellido1 || null,
       cog2_alum: datos.apellido2 || null,
       foto_alum: datos.foto,
       correu_alum: datos.email,

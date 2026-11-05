@@ -30,8 +30,8 @@
           }
           @if (tipoPersona === 'alumnos') {
             <div class="fila-2">
-              <div class="campo"><label for="f-codigo">Código</label><input id="f-codigo" name="codigo" inputmode="numeric" [(ngModel)]="datosFormulario.codigo" /></div>
-              <div class="campo"><label for="f-nac">Fecha de nacimiento</label><input id="f-nac" name="nacimiento" type="date" [(ngModel)]="datosFormulario.nacimiento" /></div>
+              <div class="campo"><label for="f-codigo">Código Alumno</label><input id="f-codigo" name="codigo" inputmode="numeric" [(ngModel)]="datosFormulario.codigo" /></div>
+              <div class="campo"><label for="f-grup">Código Curso</label><input id="f-grup" name="grup" [(ngModel)]="datosFormulario.grup" /></div>
             </div>
             <label class="campo check">
               <input name="susceptible" type="checkbox" [(ngModel)]="datosFormulario.susceptible" />

@@ -142,6 +142,10 @@ class PersonaFormComponent {
       ]),
     );
 
+
+    console.log('Datos del formulario:', datosLimpios);
+    console.log('Grupo del formulario:', datosLimpios['grup']);
+    console.log('Código del grupo matriculado:', datosLimpios['codi_grup_mat']);
     if (this.accionGestion === 'nuevo') {
       this.datosService.crear(this.tipoPersona, datosLimpios);
       const nombreCreado = datosLimpios['nombre'];
