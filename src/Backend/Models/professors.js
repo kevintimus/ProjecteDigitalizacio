@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('professors', {
-    id_ieducat_prof: {
+    id_ieduca_prof: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true

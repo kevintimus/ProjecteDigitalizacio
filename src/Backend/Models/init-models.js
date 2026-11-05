@@ -14,8 +14,8 @@ function initModels(sequelize) {
   alumnes.hasMany(registres_lababo, { as: "registres_lababos", foreignKey: "idecat_alum"});
   alumnes.belongsTo(grups, { as: "codi_grup_mat_grup", foreignKey: "codi_grup_mat"});
   grups.hasMany(alumnes, { as: "alumnes", foreignKey: "codi_grup_mat"});
-  registres_lababo.belongsTo(grups, { as: "id_grup_grup", foreignKey: "id_grup"});
-  grups.hasMany(registres_lababo, { as: "registres_lababos", foreignKey: "id_grup"});
+  registres_lababo.belongsTo(grups, { as: "codi_grup_mat_grup", foreignKey: "codi_grup_mat"});
+  grups.hasMany(registres_lababo, { as: "registres_lababos", foreignKey: "codi_grup_mat"});
   registres_lababo.belongsTo(professors, { as: "idecat_prof_professor", foreignKey: "idecat_prof"});
   professors.hasMany(registres_lababo, { as: "registres_lababos", foreignKey: "idecat_prof"});
 

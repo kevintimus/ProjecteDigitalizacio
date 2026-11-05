@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       references: {
         model: 'professors',
-        key: 'id_ieducat_prof'
+        key: 'id_ieduca_prof'
       }
     },
     codi_grup_mat: {
@@ -71,10 +71,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "id_grup",
+        name: "codi_grup_mat",
         using: "BTREE",
         fields: [
-          { name: "id_grup" },
+          { name: "codi_grup_mat" },
         ]
       },
     ]
