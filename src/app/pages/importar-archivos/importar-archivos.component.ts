@@ -1,6 +1,7 @@
 import * as XLSX from 'xlsx';
 import { Component } from '@angular/core';
 import {Alumno} from '../../core/models';
+import { AlumnoService } from '../../core/alumnoService';
 
 @Component({
   selector: 'app-importar-archivos',
@@ -9,6 +10,8 @@ import {Alumno} from '../../core/models';
   templateUrl: './importar-archivos.component.html'
 })
 export class ImportarArchivosComponent {
+
+  constructor(private alumnoServicio: AlumnoService) {}
 
   arrastrandoArchivo = false;
   archivoSeleccionado: File | null = null;
@@ -91,31 +94,40 @@ export class ImportarArchivosComponent {
 
         const filas = XLSX.utils.sheet_to_json<any>(hojaExcel);
 
-        // const alumnos: Alumno[] = filas.map((fila) => ({
-        //   nombre: fila.nom_alum,
-        //   apellido1: fila.cog1_alum ?? '',
-        //   apellido2: fila.cog2_alum ?? '',
-        //   foto: fila.foto_alum,
-        //   email: fila.correu_alum ?? '',
-        //   susceptible: fila.susceptible === 1,
-        //   codigo: fila.codi_grup_mat,
-        //
-        // }));
-        //
-        // let creados = 0;
-        // let errores = 0;
-        //
-        // for (const alumno of alumnos) {
-        //   this.alumnoService.crear(alumno).subscribe({
-        //     next: () => {
-        //       creados++;
-        //       // aquí podrías comprobar si creados + errores === alumnos.length
-        //     },
-        //     error: () => {
-        //       errores++;
-        //     }
-        //   });
-        // }
+
+        const limpiar = (v: any) => {
+          const t = String(v ?? '').trim();
+          return t === '“”' ? '' : t;
+        };
+
+        const alumnos: Alumno[] = filas.map((fila) => ({
+          id: fila.id_ieducat,
+          nombre: fila.nom_alum,
+          apellido1: limpiar(fila.cog1_alum),
+          apellido2: limpiar(fila.cog2_alum),
+          foto: fila.foto_alum,
+          email: fila.correu_alum ?? '',
+          susceptible: fila.susceptible === 1,
+          codigo: fila.codi_grup_mat,
+        }));
+
+        let creados = 0;
+        let errores = 0;
+
+        console.log('Alumnos a importar:', alumnos);
+
+        for (const alumno of alumnos) {
+          this.alumnoServicio.crear(alumno).subscribe({
+            next: (respuesta) => {
+              creados++;
+              console.log('Creado:', respuesta);
+            },
+            error: (err) => {
+              errores++;
+              console.error('Error al crear', alumno.nombre, err);
+            }
+          });
+        }
 
       }
     };

@@ -189,6 +189,29 @@ app.post('/api/AfegirAlumne', async (req, res) => {
   }
 })
 
+app.post('/api/AfegirAlumneAmbImport', async (req, res) => {
+  try {
+    const alum = await alumnes.create({
+      id_ieducat: req.body.id,
+      nom_alum: req.body.nombre,
+      cog1_alum: req.body.apellido1,
+      cog2_alum: req.body.apellido2,
+      foto_alum: req.body.foto,
+      correu_alum: req.body.email,
+      susceptible: req.body.susceptible,
+      codi_grup_mat: req.body.codigo
+    })
+    res.status(201).json(alum)
+  } catch (error) {
+    console.error("Error en el post /api/AfegirAlumneAmbImport");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al afegir un alumne nou",
+      error: error.message
+    })
+  }
+})
+
 //-----------------------------------------------
 //----------------- PROFESSORS ------------------
 //-----------------------------------------------

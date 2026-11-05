@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('professors', {
-    id_ieduca_prof: {
+    id_ieducat_prof: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -41,7 +41,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id_ieduca_prof" },
+          { name: "id_ieducat_prof" },
         ]
       },
     ]

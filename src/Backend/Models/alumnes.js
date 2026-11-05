@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       references: {
         model: 'grups',
-        key: 'codi_grup_matricula'
+        key: 'codi_grup_mat'
       }
     }
   }, {
@@ -47,16 +47,12 @@ module.exports = function(sequelize, DataTypes) {
         name: "PRIMARY",
         unique: true,
         using: "BTREE",
-        fields: [
-          { name: "id_ieducat" },
-        ]
+        fields: [{ name: "id_ieducat" }]
       },
       {
         name: "fk_grup",
         using: "BTREE",
-        fields: [
-          { name: "codi_grup_mat" },
-        ]
+        fields: [{ name: "codi_grup_mat" }]
       },
     ]
   });
