@@ -108,7 +108,7 @@ export class ImportarArchivosComponent {
           foto: fila.foto_alum,
           email: fila.correu_alum ?? '',
           susceptible: fila.susceptible === 1,
-          codigo: fila.codi_grup_mat,
+          grup: fila.codi_grup_mat,
         }));
 
         let creados = 0;
