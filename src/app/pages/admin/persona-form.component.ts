@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { DataService } from '../../core/data.service';
-import { TipoPersona, obtenerNombreCompleto, Grupo } from '../../core/models';
+import { TipoPersona, obtenerNombreCompleto} from '../../core/models';
 
 type AccionGestion = 'nuevo' | 'editar' | 'borrar';
 
@@ -16,11 +16,16 @@ type AccionGestion = 'nuevo' | 'editar' | 'borrar';
 class PersonaFormComponent {
 
   codigoBusqueda: number | null = null;
+  mostrarPassword: Boolean = false;
 
   constructor(private datosService: DataService, private sesionService: AuthService, private rutaActual: ActivatedRoute, private enrutador: Router) {
     // Se actualiza el formulario si cambian la acción o el correo en la URL.
     this.rutaActual.paramMap.subscribe(() => this.cargarFormularioDesdeRuta());
     this.rutaActual.queryParamMap.subscribe(() => this.cargarFormularioDesdeRuta());
+  }
+
+  togglePassword(): void {
+    this.mostrarPassword = !this.mostrarPassword;
   }
 
   private cargarFormularioDesdeRuta(): void {
@@ -89,6 +94,7 @@ class PersonaFormComponent {
       this.codigoBusqueda ?? '',
     );
     this.personaSeleccionada = personaEncontrada;
+    console.log(this.personaSeleccionada);
 
     if (personaEncontrada && this.accionGestion === 'editar') {
       this.datosFormulario = { ...personaEncontrada };
@@ -121,23 +127,28 @@ class PersonaFormComponent {
       return;
     }
 
-    const idPersonaActual: number | undefined = this.personaSeleccionada?.id;
+    console.log(this.personaSeleccionada?.id);
+    const idPersonaActual: number = this.personaSeleccionada?.id;
     const personaConEseCorreo = this.datosService.buscarPorCorreo(this.tipoPersona, datos.email);
     if (personaConEseCorreo && personaConEseCorreo.id !== idPersonaActual) {
       this.mostrarError('Ya existe alguien con ese correo.');
       return;
     }
 
-    if (this.tipoPersona === 'alumnos') {
-      if (datos.codigo === null) {
-        this.mostrarError('El alumno necesita un código.');
+
+
+      if (datos.codigo === "" || null) {
+        this.mostrarError('Se requiere introducir un código.');
         return;
       }
-      if (this.datosService.codigoEnUso(datos.codigo, idPersonaActual)) {
-        this.mostrarError('Ese código ya lo tiene otro alumno.');
+      console.log('Acción:', this.accionGestion);
+      console.log('Persona seleccionada:', this.personaSeleccionada);
+      if (this.datosService.codigoEnUso(this.tipoPersona ,datos.codigo)) {
+        this.mostrarError('Ese código ya esta en uso.');
         return;
       }
 
+    if (this.tipoPersona === 'alumnos') {
       if (!this.datosService.grupo(datos.grup)) {
         this.mostrarError('El grupo que estas poniendo, no existe')
         return;
@@ -152,10 +163,6 @@ class PersonaFormComponent {
       ]),
     );
 
-
-    console.log('Datos del formulario:', datosLimpios);
-    console.log('Grupo del formulario:', datosLimpios['grup']);
-    console.log('Código del grupo matriculado:', datosLimpios['codi_grup_mat']);
     if (this.accionGestion === 'nuevo') {
       this.datosService.crear(this.tipoPersona, datosLimpios);
       const nombreCreado = datosLimpios['nombre'];
@@ -163,6 +170,9 @@ class PersonaFormComponent {
       this.mensajeEstado = { tipo: 'ok', texto: `${nombreCreado} se ha creado.` };
       return;
     }
+
+    console.log('Contraseña del formulario:', this.datosFormulario.contrassenya);
+    console.log('Datos que se enviarán:', datosLimpios);
 
     this.datosService.actualizar(this.tipoPersona, idPersonaActual!, datosLimpios);
     this.mensajeEstado = { tipo: 'ok', texto: 'Cambios guardados.' };
@@ -209,8 +219,8 @@ class PersonaFormComponent {
       };
     } else {
       this.datosFormulario = {
-        nombre: '', apellido1: '', apellido2: '', email: '', aula: '', curso: '',
-        rol: 'profe',
+        nombre: '', apellido1: '', apellido2: '', email: '', codigo: '',
+        rol: false,
       };
     }
   }
