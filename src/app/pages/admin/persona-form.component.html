@@ -5,11 +5,11 @@
       <form class="panel formulario" (ngSubmit)="guardarFormulario()" novalidate>
         @if (accionGestion !== 'nuevo') {
           <div class="campo">
-            <label for="f-buscar">Correo del {{ nombreSingular }}</label>
-            <input id="f-buscar" name="buscar" type="email" list="lista-personas-correo" autocomplete="off"
-                   [(ngModel)]="datosFormulario.email" (ngModelChange)="alCambiarCorreo()" placeholder="Empieza a escribir el correo" />
-            <datalist id="lista-personas-correo">
-              @for (personaCorreo of personasDisponiblesPorCorreo; track personaCorreo.email) { <option [value]="personaCorreo.email">{{ personaCorreo.etiqueta }}</option> }
+            <label for="f-buscar">ID del {{ nombreSingular }}</label>
+            <input id="f-buscar" name="buscar" type="number" list="lista-personas-id" autocomplete="off"
+                   [(ngModel)]="codigoBusqueda" (ngModelChange)="alCambiarCorreo()" placeholder="Empieza a escribir el id" />
+            <datalist id="lista-personas-id">
+              @for (personaID of personasDisponiblesPorID; track personaID.id) { <option [value]="personaID.id">{{ personaID.etiqueta }}</option> }
             </datalist>
           </div>
         }
@@ -18,7 +18,7 @@
           @if (personaSeleccionada) {
             <p class="resumen"><strong>{{ nombrePersonaSeleccionada }}</strong> se eliminará de forma definitiva.</p>
           }
-        } @else if (accionGestion === 'nuevo' || personaSeleccionada) {
+        } @else if (accionGestion === 'nuevo' || accionGestion === 'editar' || personaSeleccionada) {
           <div class="fila-3">
             <div class="campo"><label for="f-nombre">Nombre</label><input id="f-nombre" name="nombre" [(ngModel)]="datosFormulario.nombre" /></div>
             <div class="campo"><label for="f-ap1">Primer apellido</label><input id="f-ap1" name="apellido1" [(ngModel)]="datosFormulario.apellido1" /></div>
@@ -30,8 +30,12 @@
           }
           @if (tipoPersona === 'alumnos') {
             <div class="fila-2">
-              <div class="campo"><label for="f-codigo">Código Alumno</label><input id="f-codigo" name="codigo" inputmode="numeric" [(ngModel)]="datosFormulario.codigo" /></div>
               <div class="campo"><label for="f-grup">Código Curso</label><input id="f-grup" name="grup" [(ngModel)]="datosFormulario.grup" /></div>
+              @if (accionGestion === 'nuevo') {
+                <div class="campo"><label for="f-codigo">Código Alumno</label><input id="f-codigo" name="codigo" inputmode="numeric" [(ngModel)]="datosFormulario.codigo" /></div>
+              } @else {
+                <div class="campo"><label for="f-email">Correo</label><input id="f-email" name="email" type="email" [(ngModel)]="datosFormulario.email" /></div>
+              }
             </div>
             <label class="campo check">
               <input name="susceptible" type="checkbox" [(ngModel)]="datosFormulario.susceptible" />

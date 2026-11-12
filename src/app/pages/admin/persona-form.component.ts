@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { DataService } from '../../core/data.service';
-import { TipoPersona, obtenerNombreCompleto } from '../../core/models';
+import { TipoPersona, obtenerNombreCompleto, Grupo } from '../../core/models';
 
 type AccionGestion = 'nuevo' | 'editar' | 'borrar';
 
@@ -14,6 +14,9 @@ type AccionGestion = 'nuevo' | 'editar' | 'borrar';
   templateUrl: './persona-form.component.html',
 })
 class PersonaFormComponent {
+
+  codigoBusqueda: number | null = null;
+
   constructor(private datosService: DataService, private sesionService: AuthService, private rutaActual: ActivatedRoute, private enrutador: Router) {
     // Se actualiza el formulario si cambian la acción o el correo en la URL.
     this.rutaActual.paramMap.subscribe(() => this.cargarFormularioDesdeRuta());
@@ -68,7 +71,7 @@ class PersonaFormComponent {
     }[this.accionGestion];
   }
 
-  get personasDisponiblesPorCorreo() {
+  get personasDisponiblesPorID() {
     return this.datosService.correos.filter((persona) => persona.tipo === this.tipoPersona);
   }
 
@@ -81,9 +84,9 @@ class PersonaFormComponent {
     this.mensajeEstado = null;
     if (this.accionGestion === 'nuevo') return;
 
-    const personaEncontrada = this.datosService.buscarPorCorreo(
+    const personaEncontrada = this.datosService.buscarPorID(
       this.tipoPersona,
-      this.datosFormulario.email ?? '',
+      this.codigoBusqueda ?? '',
     );
     this.personaSeleccionada = personaEncontrada;
 
@@ -101,14 +104,15 @@ class PersonaFormComponent {
     }
 
     if (this.accionGestion === 'editar' && !this.personaSeleccionada) {
-      this.mostrarError('Elige primero un correo de la lista.');
+      this.mostrarError('Elige primero un ID de la lista.');
       return;
     }
 
     const datos = this.datosFormulario;
-    const camposObligatorios = [datos.nombre, datos.apellido1, datos.email];
-    if (!camposObligatorios.every((valor) => String(valor ?? '').trim())) {
-      this.mostrarError('Rellena nombre, primer apellido y correo.');
+    const camposObligatorios = [datos.nombre, datos.email];
+    if (!camposObligatorios.every((valor) => String(valor ?? '').trim()) || datos.codigo === null) {
+      console.log(datos.nombre, datos.codigo, datos.email);
+      this.mostrarError('Rellena nombre, el correo, y el id.');
       return;
     }
 
@@ -125,7 +129,7 @@ class PersonaFormComponent {
     }
 
     if (this.tipoPersona === 'alumnos') {
-      if (!String(datos.codigo ?? '').trim()) {
+      if (datos.codigo === null) {
         this.mostrarError('El alumno necesita un código.');
         return;
       }
@@ -133,6 +137,12 @@ class PersonaFormComponent {
         this.mostrarError('Ese código ya lo tiene otro alumno.');
         return;
       }
+
+      if (!this.datosService.grupo(datos.grup)) {
+        this.mostrarError('El grupo que estas poniendo, no existe')
+        return;
+      }
+
     }
 
     const datosLimpios = Object.fromEntries(

@@ -273,7 +273,7 @@ app.post('/api/AfegirGrups', async (req, res) => {
 //-----------------------------------------------
 app.put('/api/ModificarAlumne/:id', async (req, res) => {
   try{
-    const alum = alumnes.findByPk(req.params.id)
+    const alum = await alumnes.findByPk(req.params.id)
     if (!alum) {
       return res.status(404).json({
         mensaje: "Alumne no trobat"
@@ -411,6 +411,10 @@ app.delete('/api/EliminarAlumne/:id', async (req, res) => {
       });
     }
 
+    await registres_lababo.destroy({
+      where: { idecat_alum: req.params.id }
+    });
+
     await alum.destroy();
 
     res.status(204).send();
@@ -451,6 +455,9 @@ app.delete('/api/EliminarProfessor/:id', async (req, res) => {
   }
 })
 
+//-----------------------------------------------
+//-------------------- GRUPS --------------------
+//-----------------------------------------------
 
 app.delete('/api/EliminarGrup/:id', async (req,res) => {
   try {
