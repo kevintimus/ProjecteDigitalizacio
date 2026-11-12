@@ -357,6 +357,7 @@ app.put('/api/ModificarProfessor/:id', async (req, res) => {
       cog1_prof: req.body.cog1_prof,
       cog2_prof: req.body.cog2_prof,
       correu: req.body.correu,
+      contrasenya: req.body.contrasenya,
       admin: req.body.admin
     })
     res.json(profe)

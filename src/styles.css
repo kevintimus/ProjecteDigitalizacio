@@ -217,3 +217,41 @@ background: rgba(165, 211, 122, 0.25);
 transform: scale(1.01);
 }
 
+.campo-password {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.campo-password input {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-ojo {
+  background: #f1f3f5;
+  color: #495057;
+  border: 1px solid #dce1e7;
+  border-radius: 8px;
+  padding: 9px 13px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-ojo:hover {
+  background: #e2e7ed;
+  border-color: #c5ccd5;
+  color: #212529;
+}
+
+.btn-ojo:active {
+  transform: scale(0.96);
+}
+
+.btn-ojo:focus-visible {
+  outline: 2px solid #8bbf45;
+  outline-offset: 2px;
+}

@@ -242,15 +242,21 @@ export class DataService {
   }
 
   codigoEnUso(
-    codigoAlumno: number,
-    idAlumnoExcluido?: number
+    tipoPersona: TipoPersona,
+    codigo: number,
   ): boolean {
-    const codigo = codigoAlumno;
-
-    return this.alumnos.some(alumno =>
-      alumno.id === codigo &&
-      alumno.id !== idAlumnoExcluido
-    );
+    console.log(codigo, tipoPersona);
+    console.log(this.alumnos);
+    if (tipoPersona === "alumnos") {
+      return this.alumnos.some(alumno =>
+        alumno.id === codigo
+      );
+    } else {
+      console.log(this.profesores);
+      return this.profesores.some(profe =>
+        profe.id === codigo
+      );
+    }
   }
 
   buscarPorCorreo(
@@ -351,6 +357,7 @@ export class DataService {
       cog2_alum: datos.apellido2 || null,
       foto_alum: datos.foto,
       correu_alum: datos.email,
+      susceptible: datos.susceptible ? 1 : 0,
       codi_grup_mat: datos.grup
     };
 
@@ -377,11 +384,14 @@ export class DataService {
   // CREAR UN PROFESOR
   // =====================================================
 
-  crearProfesor(datos: Partial<Profesor>): Observable<Profesor> {
+  crearProfesor(datos: Partial<Profesor> & {
+    codigo?: string;
+  }): Observable<Profesor> {
+    console.log(datos);
     const body = {
-      id_ieduca_prof: datos.id,
+      id_ieduca_prof: Number(datos.codigo ?? datos.id),
       nom_prof: datos.nombre,
-      cog1_prof: datos.apellido1,
+      cog1_prof: datos.apellido1 || null,
       cog2_prof: datos.apellido2 || null,
       correu: datos.email,
       contrasenya: datos.contrassenya,
@@ -411,13 +421,16 @@ export class DataService {
     datos: Partial<Profesor>
   ): Observable<Profesor> {
 
+    console.log('Contraseña recibida:', datos.contrassenya);
     const body = {
       nom_prof: datos.nombre,
       cog1_prof: datos.apellido1,
       cog2_prof: datos.apellido2 || null,
       correu: datos.email,
+      contrasenya: datos.contrassenya,
       admin: datos.admin ? 1 : 0
     };
+    console.log('Body enviado:', body);
 
     return this.http.put<any>(
       `${this.api}/ModificarProfessor/${id}`,
@@ -471,6 +484,8 @@ export class DataService {
   // =====================================================
 
   crear(tipoPersona: TipoPersona, datosPersona: any): void {
+    console.log("dades persona metode crear:");
+    console.log(datosPersona);
     if (tipoPersona === 'alumnos') {
       this.crearAlumno(datosPersona).subscribe({
         next: () => {

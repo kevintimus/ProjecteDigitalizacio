@@ -32,7 +32,7 @@
             <div class="fila-2">
               <div class="campo"><label for="f-grup">Código Curso</label><input id="f-grup" name="grup" [(ngModel)]="datosFormulario.grup" /></div>
               @if (accionGestion === 'nuevo') {
-                <div class="campo"><label for="f-codigo">Código Alumno</label><input id="f-codigo" name="codigo" inputmode="numeric" [(ngModel)]="datosFormulario.codigo" /></div>
+                <div class="campo"><label for="f-codigo">Código Alumno</label><input id="f-codigo" name="codigo" inputmode="numeric" type="number" [(ngModel)]="datosFormulario.codigo" /></div>
               } @else {
                 <div class="campo"><label for="f-email">Correo</label><input id="f-email" name="email" type="email" [(ngModel)]="datosFormulario.email" /></div>
               }
@@ -44,19 +44,32 @@
 
           } @else {
             <div class="fila-2">
-              <div class="campo"><label for="f-aula">Aula</label><input id="f-aula" name="aula" [(ngModel)]="datosFormulario.aula" /></div>
-              <div class="campo"><label for="f-curso">Curso</label><input id="f-curso" name="curso" [(ngModel)]="datosFormulario.curso" /></div>
-            </div>
-            <div class="fila-2">
-              <div class="campo"><label for="f-nac">Fecha de nacimiento</label><input id="f-nac" name="nacimiento" type="date" [(ngModel)]="datosFormulario.nacimiento" /></div>
+              <div class="campo"><label for="f-pass">Contraseña de acceso</label>
+                <div class="campo-password">
+                  <input id="f-pass" name="contraseña" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="datosFormulario.contrassenya" />
+                  <button
+                    type="button"
+                    class="btn-ojo"
+                    (click)="togglePassword()"
+                    [attr.aria-label]="mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                    {{ mostrarPassword ? 'Ocultar' : 'Mostrar' }}
+                  </button>
+                </div>
+              </div>
               <div class="campo">
                 <label for="f-rol">Rol</label>
-                <select id="f-rol" name="rol" [(ngModel)]="datosFormulario.rol">
-                  <option value="profe">Profesor (solo envía alumnos al baño)</option>
-                  <option value="admin">Admin (puede modificar datos)</option>
+                <select id="f-rol" name="rol" [(ngModel)]="datosFormulario.admin">
+                  <option [ngValue]="false">Profesor (solo envía alumnos al baño)</option>
+                  <option [ngValue]="true">Admin (puede modificar datos)</option>
                 </select>
               </div>
             </div>
+            @if (accionGestion === 'nuevo') {
+              <div class="campo"><label for="f-codigo">Código Profesor</label><input id="f-codigo" name="codigo" inputmode="numeric" type="number" [(ngModel)]="datosFormulario.codigo" /></div>
+            } @else {
+              <div class="campo"><label for="f-email">Correo</label><input id="f-email" name="email" type="email" [(ngModel)]="datosFormulario.email" /></div>
+            }
+
           }
         }
 
