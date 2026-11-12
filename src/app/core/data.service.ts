@@ -196,10 +196,6 @@ export class DataService {
   // OBTENER UNA PERSONA
   // =====================================================
 
-  // Se mantiene síncrono porque las pantallas originales
-  // utilizan estos métodos sin subscribe().
-  // Los datos proceden de la carga inicial del backend.
-
   alumno(idAlumno: number | string): Alumno | undefined {
     return this.alumnos.find(
       alumno => String(alumno.id) === String(idAlumno)
@@ -212,6 +208,12 @@ export class DataService {
     );
   }
 
+  grupo(idGrupo: number | string): Grupo | undefined {
+    return this.grupos.find(
+      grupo => String(grupo.id) === String(idGrupo)
+    )
+  }
+
   // =====================================================
   // BÚSQUEDAS Y COMPROBACIONES
   // =====================================================
@@ -220,7 +222,7 @@ export class DataService {
     email: string;
     etiqueta: string;
     tipo: TipoPersona;
-    id: number;
+    id: number | string;
   }[] {
     const correosProfesores = this.profesores.map(profesor => ({
       email: profesor.email,
@@ -240,13 +242,13 @@ export class DataService {
   }
 
   codigoEnUso(
-    codigoAlumno: string,
+    codigoAlumno: number,
     idAlumnoExcluido?: number
   ): boolean {
-    const codigo = codigoAlumno.trim();
+    const codigo = codigoAlumno;
 
     return this.alumnos.some(alumno =>
-      String(alumno.id) === codigo &&
+      alumno.id === codigo &&
       alumno.id !== idAlumnoExcluido
     );
   }
@@ -265,6 +267,25 @@ export class DataService {
     return personas.find(
       persona =>
         persona.email.toLowerCase() === correoNormalizado
+    );
+  }
+
+  buscarPorID(
+    tipoPersona: TipoPersona,
+    id: number | string
+  ): Persona | undefined {
+
+    const personas: Persona[] =
+      tipoPersona === 'alumnos'
+        ? this.alumnos
+        : this.profesores;
+    console.log(personas.find(
+      persona =>
+        persona.id === id
+    ));
+    return personas.find(
+      persona =>
+        persona.id === id
     );
   }
 
