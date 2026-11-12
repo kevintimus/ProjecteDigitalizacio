@@ -45,7 +45,17 @@
               </div>
             </div>
             <dl class="datos">
-              <div><dt>Permiso del profesor</dt><dd>{{ sesionService.user ? obtenerNombreCompleto(sesionService.user!) : '' }}</dd></div>
+              <div>
+                <dt>Permiso del profesor</dt>
+                <dd>
+                  <input list="lista-profes" [(ngModel)]="profesorElegido" placeholder="Escribe o elige">
+                  <datalist id="lista-profes">
+                    @for (p of datosService.profesores; track p.id) {
+                      <option [value]="obtenerNombreCompleto(p)"></option>
+                    }
+                  </datalist>
+                </dd>
+              </div>
               <div><dt>Susceptible</dt><dd [class.texto-alerta]="alumnoActualSeleccionado.susceptible">{{ alumnoActualSeleccionado.susceptible ? 'Sí' : 'No' }}</dd></div>
               <div><dt>Salidas registradas</dt><dd>{{ datosService.totalSalidasDe(alumnoActualSeleccionado.id) }}</dd></div>
               @if (salidaAbiertaAlumno; as salidaAbiertaActual) {

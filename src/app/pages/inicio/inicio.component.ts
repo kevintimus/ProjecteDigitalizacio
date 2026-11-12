@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { DataService } from '../../core/data.service';
-import { Alumno, formatearFecha, obtenerIniciales, obtenerNombreCompleto, Salida } from '../../core/models';
+import {Alumno, formatearFecha, obtenerIniciales, obtenerNombreCompleto, Profesor, Salida} from '../../core/models';
 
 @Component({
   selector: 'app-inicio',
@@ -73,8 +73,14 @@ export class InicioComponent {
       this.datosService.registrarSalida(salidaAbierta.id);
       this.mensajeAviso = `Salida registrada: ${alumno.nombre} ha vuelto a clase.`;
     } else {
-      this.datosService.enviarAlBano(alumno.id, profesorActual.id);
-      this.mensajeAviso = `${alumno.nombre} está en el baño.`;
+      var profesorQueHaEnviado = this.buscarProfesorElegido();
+      if (profesorQueHaEnviado == undefined) {
+        console.log("No hay ningun profe con ese nombre")
+        return;
+      } else {
+        this.datosService.enviarAlBano(alumno.id, profesorQueHaEnviado.id);
+        this.mensajeAviso = `${alumno.nombre} está en el baño.`;
+      }
     }
     this.limpiarFormulario(false);
   }
@@ -89,6 +95,7 @@ export class InicioComponent {
     this.alumnoSeleccionado = null;
     this.mensajeError = '';
     if (borrarAviso) this.mensajeAviso = '';
+    this.profesorElegido = '';
   }
 
   irAFichaPorCorreo(): void {
@@ -101,5 +108,20 @@ export class InicioComponent {
     }
     this.errorBusquedaCorreo = '';
     this.enrutador.navigate(['/ficha', personaEncontrada.tipo, personaEncontrada.id]);
+  }
+
+  public normalizar(texto: string): string {
+    return texto
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  profesorElegido = '';
+
+  public buscarProfesorElegido(): Profesor | undefined {
+    const texto = this.normalizar(this.profesorElegido);
+    return this.datosService.profesores.find(p => this.normalizar(obtenerNombreCompleto(p)) === texto);
   }
 }
