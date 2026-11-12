@@ -13,13 +13,18 @@ import { obtenerNombreCompleto } from '../../core/models';
 })
 export class LoginComponent {
   readonly obtenerNombreCompleto = obtenerNombreCompleto;
-  correoProfesor: string;
+  correoProfesor = "";
+  contrasenya = "";
+  errorLogin = "";
 
   constructor(public datosService: DataService, private sesionService: AuthService, private enrutador: Router) {
-    this.correoProfesor = this.datosService.profesores[0]?.email ?? '';
+
   }
 
   entrar(): void {
-    if (this.sesionService.login(this.correoProfesor)) this.enrutador.navigate(['/']);
+    if (this.sesionService.login(this.correoProfesor, this.contrasenya)) this.enrutador.navigate(['/']);
+    else {
+      this.errorLogin = "Credenciales incorrectas";
+    }
   }
 }

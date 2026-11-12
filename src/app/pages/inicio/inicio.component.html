@@ -38,7 +38,13 @@
         @if (alumnoSeleccionado; as alumnoActualSeleccionado) {
           <section class="panel ficha" aria-label="Ficha del alumno">
             <div class="ficha-cab">
-              <div class="avatar" aria-hidden="true">{{ obtenerIniciales(alumnoActualSeleccionado) }}</div>
+              <div class="avatar" aria-hidden="true">
+                @if (alumnoActualSeleccionado.foto) {
+                  <img [src]="'fotos/' + alumnoActualSeleccionado.foto" alt="">
+                } @else {
+                  {{ obtenerIniciales(alumnoActualSeleccionado) }}
+                }
+              </div>
               <div>
                 <h2>{{ obtenerNombreCompleto(alumnoActualSeleccionado) }}</h2>
                 @if (alumnoActualSeleccionado.susceptible) { <span class="chip chip-alerta">Susceptible</span> }
@@ -80,7 +86,11 @@
         <ul class="fuera-lista">
           @for (registroSalidaAbierta of alumnosEnBano; track registroSalidaAbierta.salida.id) {
             <li class="tarjeta-fuera" [class.largo]="registroSalidaAbierta.minutosFuera >= 10">
-              <div class="avatar peq" aria-hidden="true">{{ obtenerIniciales(registroSalidaAbierta.alumno) }}</div>
+              <div class="avatar peq" aria-hidden="true"> @if (registroSalidaAbierta.alumno.foto) {
+                <img [src]="'fotos/' + registroSalidaAbierta.alumno.foto" alt="">
+              } @else {
+                {{ obtenerIniciales(registroSalidaAbierta.alumno) }}
+              }</div>
               <div>
                 <strong>{{ obtenerNombreCompleto(registroSalidaAbierta.alumno) }}</strong>
                 <div class="detalle">Entrada a las {{ registroSalidaAbierta.salida.horaEntrada | date: 'HH:mm' }}</div>

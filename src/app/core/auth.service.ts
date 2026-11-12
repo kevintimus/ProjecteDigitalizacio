@@ -22,9 +22,10 @@ export class AuthService {
     return this.user?.admin === true;
   }
 
-  login(correo: string): boolean {
+  login(correo: string, contrassenya: string): boolean {
     const profesor = this.datosService.buscarPorCorreo('profesores', correo) as Profesor | undefined;
     if (!profesor) return false;
+    if (profesor.contrassenya !== contrassenya) return false;
     this.idUsuarioSesion = profesor.id;
     try { sessionStorage.setItem(CLAVE_SESION, String(profesor.id)); } catch { /* El navegador puede bloquear el almacenamiento. */ }
     return true;
