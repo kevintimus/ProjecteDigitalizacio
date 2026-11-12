@@ -6,6 +6,7 @@ import PersonaFormComponent from './pages/admin/persona-form.component';
 import {FichaComponent} from './pages/ficha/ficha.component';
 import {InicioComponent} from './pages/inicio/inicio.component';
 import {LoginComponent} from './pages/login/login.component';
+import {RegistrosComponent} from './pages/registros/registros.component';
 
 export const routes: Routes = [
   {
@@ -44,6 +45,12 @@ export const routes: Routes = [
     title: 'Importar Archivos',
     canActivate: [AdminGuard],
     component: ImportarArchivosComponent,
+  },
+  {
+    path: 'admin/registros',
+    title: 'Registros',
+    canActivate: [AdminGuard],
+    component: RegistrosComponent,
   },
   { path: '**', redirectTo: '' },
 ];

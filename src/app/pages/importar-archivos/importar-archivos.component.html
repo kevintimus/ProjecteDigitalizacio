@@ -9,7 +9,7 @@
   (click)="fileInput.click()">
 
   @if (archivoSeleccionado; as archivoActual) {
-    <p class="dz-titulo">📄 {{ archivoActual.name }}</p>
+    <p class="dz-titulo"> 📄 {{ archivoActual.name }}</p>
     <p class="dz-ayuda">
       {{ (archivoActual.size / 1024).toFixed(1) }} KB
     </p>
@@ -17,14 +17,19 @@
     <button type="button" class="btn btn-claro" (click)="quitarArchivoSeleccionado($event, fileInput)"> Quitar </button>
   } @else {
     <p class="dz-titulo">
-      Arrastra aquí tu XLS o haz clic para elegirlo
+      Arrastra aquí tu Excel (alumnos, profesores o grupos) o haz clic para elegirlo
     </p>
-    <p class="dz-ayuda">Solo archivos .csv o .xls</p>
+    <p class="dz-ayuda">Solo archivos .xls o .xlsx</p>
   }
 
   <input #fileInput type="file" accept=".xls,.xlsx" hidden (change)="alElegirArchivo($event)">
 
 </div>
+
+@if (mensajeError) {
+  <p class="error">{{ mensajeError }}</p>
+}
+
 @if (archivoSeleccionado) {
-  <button type="button" class="btn btn-claro" (click)="verContenidoArchivo()"> Crear usuarios o profesores </button>
+  <button type="button" class="btn btn-claro" (click)="verContenidoArchivo()"> Importar </button>
 }
