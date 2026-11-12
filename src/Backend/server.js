@@ -230,6 +230,28 @@ app.post('/api/AfegirProfe', async (req, res) => {
   }
 })
 
+app.post('/api/AfegirProfeAmbImport', async (req, res) => {
+  try {
+    const prof = await professors.create({
+      id_jeduca_prof: req.body.id,
+      nom_prof: req.body.nombre,
+      cog1_prof: req.body.apellido1,
+      cog2_prof: req.body.apellido2,
+      correu: req.body.email,
+      contrasenya: req.body.contrassenya,
+      admin: req.body.admin
+    })
+    res.status(201).json(prof)
+  } catch (error) {
+    console.error("Error en el post /api/AfegirProfeAmbImport");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al afegir un professor nou",
+      error: error.message
+    })
+  }
+})
+
 //-----------------------------------------------
 //------------------ REGISTRES ------------------
 //-----------------------------------------------
@@ -261,6 +283,24 @@ app.post('/api/AfegirGrups', async (req, res) => {
     console.error(error);
     res.status(500).json({
       mensaje: "Error al afegir un grup",
+      error: error.message
+    })
+  }
+})
+
+app.post('/api/AfegirGrupAmbImport', async (req, res) => {
+  try {
+    const grup = await grups.create({
+      codi_grup_matricula: req.body.id,
+      curs: req.body.curs,
+      grup: req.body.grup
+    })
+    res.status(201).json(grup)
+  } catch (error) {
+    console.error("Error en el post /api/AfegirGrupAmbImport");
+    console.error(error);
+    res.status(500).json({
+      mensaje: "Error al afegir un grup nou",
       error: error.message
     })
   }

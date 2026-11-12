@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
+import {Observable, forkJoin, catchError, of} from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import {
@@ -32,7 +32,6 @@ export class DataService {
   errorCarga = '';
 
   constructor(private http: HttpClient) {
-    this.cargarDatosIniciales();
   }
 
   // =====================================================
@@ -92,11 +91,11 @@ export class DataService {
   // CARGA INICIAL DE LOS DATOS
   // =====================================================
 
-  cargarDatosIniciales(): void {
+  cargarDatosIniciales(): Observable<any> {
     this.cargando = true;
     this.errorCarga = '';
 
-    forkJoin({
+    return forkJoin({
       alumnos: this.http.get<any[]>(
         `${this.api}/getAlumnes`
       ),
@@ -109,8 +108,9 @@ export class DataService {
       salidas: this.http.get<any[]>(
         `${this.api}/getRegistreLavabo`
       )
-    }).subscribe({
-      next: (datos) => {
+
+    }).pipe(
+      tap(datos => {
         this.alumnos = datos.alumnos.map(
           alumno => this.mapAlumno(alumno)
         );
@@ -128,8 +128,8 @@ export class DataService {
         );
 
         this.cargando = false;
-      },
-      error: (error) => {
+      }),
+      catchError(error => {
         console.error(
           'Error al cargar los datos del backend:',
           error
@@ -139,8 +139,10 @@ export class DataService {
           'No se han podido cargar los datos. Comprueba que el backend y MySQL estén funcionando.';
 
         this.cargando = false;
-      }
-    });
+
+        return of(null);
+      })
+    );
   }
 
   // =====================================================

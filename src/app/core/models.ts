@@ -6,7 +6,6 @@ export interface Persona {
   apellido1: string;
   apellido2: string;
   email: string;
-  /** Formato ISO yyyy-mm-dd (el que usa <input type="date">) */
 }
 
 export interface Profesor extends Persona {

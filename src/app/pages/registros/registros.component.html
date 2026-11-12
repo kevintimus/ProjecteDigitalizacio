@@ -1,0 +1,37 @@
+<div class="page">
+  <div class="acciones">
+    <button class="btn btn-claro" (click)="verAlumnos()">Alumnos</button>
+    <button class="btn btn-claro" (click)="verProfesores()">Profesores</button>
+    <button class="btn btn-claro" (click)="verGrupos()">Grupos</button>
+    <button class="btn btn-claro" (click)="verRegistros()">Registros</button>
+
+    <select #sel [value]="columnaFiltro" (change)="columnaFiltro = sel.value">
+      <option value="">Todas las columnas</option>
+      @for (col of columnas; track col) {
+        <option [value]="col">{{ col }}</option>
+      }
+    </select>
+
+    <input #caja type="text" placeholder="Filtrar..." [value]="filtro" (input)="filtro = caja.value">
+
+  </div>
+
+  <table class="tabla">
+    <thead>
+    <tr>
+      @for (col of columnas; track col) {
+        <th>{{ col }}</th>
+      }
+    </tr>
+    </thead>
+    <tbody>
+      @for (fila of filasFiltradas(); track $index) {
+        <tr>
+          @for (col of columnas; track col) {
+            <td>{{ fila[col] }}</td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
