@@ -4,16 +4,46 @@
       @if (alumno; as alumnoSeleccionado) {
         <section class="panel ficha" aria-label="Ficha del alumno">
           <div class="ficha-cab">
-            <div class="avatar" aria-hidden="true">{{ obtenerIniciales(alumnoSeleccionado) }}</div>
+            <div class="avatar" aria-hidden="true">
+              @if (alumnoSeleccionado.foto) {
+                <img [src]="datosService.urlFotos + alumnoSeleccionado.foto" alt="">
+              } @else {
+                {{ obtenerIniciales(alumnoSeleccionado) }}
+              }            </div>
             <div>
               <h1>{{ obtenerNombreCompleto(alumnoSeleccionado) }}</h1>
-              @if (alumnoSeleccionado.susceptible) { <span class="chip chip-alerta">Susceptible</span> }
             </div>
           </div>
           <dl class="datos">
-            <div><dt>Correo</dt><dd>{{ alumnoSeleccionado.email }}</dd></div>
-            <div><dt>Código</dt><dd>{{ alumnoSeleccionado.grup }}</dd></div>
-            <div><dt>Salidas registradas</dt><dd>{{ datosService.totalSalidasDe(alumnoSeleccionado.id) }}</dd></div>
+            <div class="correo-completo">
+              <dt>Correo</dt>
+              <dd>{{ alumnoSeleccionado.email }}</dd>
+            </div>
+
+            <div class="id-alum">
+              <dt>Codigo alumno</dt>
+              <dd> {{ alumnoSeleccionado.id }} </dd>
+            </div>
+
+            <div>
+              <dt>Código Grupo</dt>
+              <dd>{{ alumnoSeleccionado.grup }}</dd>
+            </div>
+
+            <div>
+              <dt>Salidas registradas</dt>
+              <dd>{{ datosService.totalSalidasDe(alumnoSeleccionado.id) }}</dd>
+            </div>
+
+            <div>
+              <dt>Situació alumne</dt>
+              @if (alumnoSeleccionado.susceptible) {
+                <span class="chip chip-alerta">Susceptible</span>
+              } @else {
+                <span class="chip chip-rol">NO Susceptible</span>
+              }
+              <dd></dd>
+            </div>
           </dl>
           <div class="acciones">
             <a class="btn btn-lima" [routerLink]="['/admin', 'alumnos', 'editar']" [queryParams]="{ correo: alumnoSeleccionado.email }">Editar alumno</a>
