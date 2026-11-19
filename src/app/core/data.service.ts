@@ -286,13 +286,9 @@ export class DataService {
       tipoPersona === 'alumnos'
         ? this.alumnos
         : this.profesores;
-    console.log(personas.find(
-      persona =>
-        persona.id === id
-    ));
+
     return personas.find(
-      persona =>
-        persona.id === id
+      persona => Number(persona.id) === Number(id)
     );
   }
 
