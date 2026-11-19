@@ -20,6 +20,7 @@ export class DataService {
 
   // URL del backend Express
   readonly api = 'http://localhost:3000/api';
+  readonly urlFotos = 'http://localhost:3000/fotos/';
 
   // Datos que utiliza el frontend.
   // Se rellenan con los datos recibidos de la base de datos.

@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { crearConfigBaseDades } from './dbConf.js';
 import {initModels} from './Models/init-models.js'
+import * as path from "node:path";
 
 
 //cd .\src\Backend\
@@ -21,6 +22,10 @@ app.use(express.json());
 const dbSQL = crearConfigBaseDades();
 const { alumnes, grups, professors, registres_lababo } = initModels(dbSQL);
 
+const __dirname = import.meta.dirname;
+
+
+//region Obtenir Dades (GET)
 //________________________ OBTENIR DADES (GET) ________________________
 
 //-----------------------------------------------
@@ -169,6 +174,9 @@ app.get('/api/getGrups/:id', async (req,res) => {
   }
 
 })
+//endregion
+
+//region Crear (POST)
 //________________________ CREAR DADES (POST) ________________________
 
 //-----------------------------------------------
@@ -305,7 +313,9 @@ app.post('/api/AfegirGrupAmbImport', async (req, res) => {
     })
   }
 })
+//endregion
 
+//region Modificar
 //________________________ MODIFICAR DADES (PUT) ________________________
 
 //-----------------------------------------------
@@ -436,6 +446,9 @@ app.put('/api/ModificarGrup/:id', async (req, res) => {
     })
   }
 })
+//endregion
+
+//region EliminarDades
 //________________________ ELIMINAR DADES (DELETE) ________________________
 
 //-----------------------------------------------
@@ -522,4 +535,9 @@ app.delete('/api/EliminarGrup/:id', async (req,res) => {
     });
   }
 })
+//endregion
+
+//FOTOS
+app.use('/fotos', express.static(path.join(__dirname, 'fotos')));
+
 app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));

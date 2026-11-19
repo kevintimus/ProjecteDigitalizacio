@@ -40,7 +40,7 @@
             <div class="ficha-cab">
               <div class="avatar" aria-hidden="true">
                 @if (alumnoActualSeleccionado.foto) {
-                  <img [src]="'fotos/' + alumnoActualSeleccionado.foto" alt="">
+                  <img [src]="datosService.urlFotos + alumnoActualSeleccionado.foto" alt="">
                 } @else {
                   {{ obtenerIniciales(alumnoActualSeleccionado) }}
                 }
@@ -87,7 +87,7 @@
           @for (registroSalidaAbierta of alumnosEnBano; track registroSalidaAbierta.salida.id) {
             <li class="tarjeta-fuera" [class.largo]="registroSalidaAbierta.minutosFuera >= 10">
               <div class="avatar peq" aria-hidden="true"> @if (registroSalidaAbierta.alumno.foto) {
-                <img [src]="'fotos/' + registroSalidaAbierta.alumno.foto" alt="">
+                <img [src]="datosService.urlFotos + registroSalidaAbierta.alumno.foto" alt="">
               } @else {
                 {{ obtenerIniciales(registroSalidaAbierta.alumno) }}
               }</div>
@@ -102,4 +102,3 @@
         </ul>
       </aside>
     </main>
-
