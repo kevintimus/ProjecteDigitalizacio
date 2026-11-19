@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { DataService } from '../../core/data.service';
-import { TipoPersona, obtenerNombreCompleto} from '../../core/models';
+import { TipoPersona, obtenerNombreCompleto } from '../../core/models';
 
 type AccionGestion = 'nuevo' | 'editar' | 'borrar';
 
@@ -11,7 +11,7 @@ type AccionGestion = 'nuevo' | 'editar' | 'borrar';
   selector: 'app-persona-form',
   standalone: true,
   imports: [FormsModule, RouterLink],
-  templateUrl: './persona-form.component.html',
+  templateUrl: './persona-form.component.html'
 })
 class PersonaFormComponent {
 
@@ -41,9 +41,12 @@ class PersonaFormComponent {
     this.accionGestion = accionGestion as AccionGestion;
     this.restablecerFormulario();
 
-    const correoConsulta = this.rutaActual.snapshot.queryParamMap.get('correo');
-    if (correoConsulta && this.accionGestion !== 'nuevo') {
-      this.datosFormulario.email = correoConsulta;
+    console.log('ID ---------___--_- ' + this.datosFormulario.codigo);
+    const idConsulta = this.rutaActual.snapshot.queryParamMap.get('id');
+    if (idConsulta && this.accionGestion !== 'nuevo') {
+      this.datosFormulario.codigo = Number(idConsulta);
+      this.codigoBusqueda = Number(idConsulta);
+      console.log('ID ---------___--_- ' + this.datosFormulario.codigo);
       this.alCambiarCorreo();
     }
   }
@@ -72,7 +75,7 @@ class PersonaFormComponent {
     return {
       nuevo: `Crear ${this.nombreSingular}`,
       editar: 'Guardar cambios',
-      borrar: 'Eliminar',
+      borrar: 'Eliminar'
     }[this.accionGestion];
   }
 
@@ -87,14 +90,21 @@ class PersonaFormComponent {
   alCambiarCorreo(): void {
     this.requiereConfirmacion = false;
     this.mensajeEstado = null;
+
     if (this.accionGestion === 'nuevo') return;
+
+    const id = this.codigoBusqueda;
+
+    if (id == null) return;
 
     const personaEncontrada = this.datosService.buscarPorID(
       this.tipoPersona,
-      this.codigoBusqueda ?? '',
+      id
     );
+
     this.personaSeleccionada = personaEncontrada;
-    console.log(this.personaSeleccionada);
+
+    console.log('Persona seleccionada:', personaEncontrada);
 
     if (personaEncontrada && this.accionGestion === 'editar') {
       this.datosFormulario = { ...personaEncontrada };
@@ -136,21 +146,20 @@ class PersonaFormComponent {
     }
 
 
-
-      if (datos.codigo === "" || null) {
-        this.mostrarError('Se requiere introducir un código.');
-        return;
-      }
-      console.log('Acción:', this.accionGestion);
-      console.log('Persona seleccionada:', this.personaSeleccionada);
-      if (this.datosService.codigoEnUso(this.tipoPersona ,datos.codigo)) {
-        this.mostrarError('Ese código ya esta en uso.');
-        return;
-      }
+    if (datos.codigo === '' || null) {
+      this.mostrarError('Se requiere introducir un código.');
+      return;
+    }
+    console.log('Acción:', this.accionGestion);
+    console.log('Persona seleccionada:', this.personaSeleccionada);
+    if (this.datosService.codigoEnUso(this.tipoPersona, datos.codigo)) {
+      this.mostrarError('Ese código ya esta en uso.');
+      return;
+    }
 
     if (this.tipoPersona === 'alumnos') {
       if (!this.datosService.grupo(datos.grup)) {
-        this.mostrarError('El grupo que estas poniendo, no existe')
+        this.mostrarError('El grupo que estas poniendo, no existe');
         return;
       }
 
@@ -159,8 +168,8 @@ class PersonaFormComponent {
     const datosLimpios = Object.fromEntries(
       Object.entries(datos).map(([nombreCampo, valorCampo]) => [
         nombreCampo,
-        typeof valorCampo === 'string' ? valorCampo.trim() : valorCampo,
-      ]),
+        typeof valorCampo === 'string' ? valorCampo.trim() : valorCampo
+      ])
     );
 
     if (this.accionGestion === 'nuevo') {
@@ -215,12 +224,12 @@ class PersonaFormComponent {
     if (this.tipoPersona === 'alumnos') {
       this.datosFormulario = {
         nombre: '', apellido1: '', apellido2: '', email: '', codigo: '',
-        susceptible: false,
+        susceptible: false
       };
     } else {
       this.datosFormulario = {
         nombre: '', apellido1: '', apellido2: '', email: '', codigo: '',
-        rol: false,
+        rol: false
       };
     }
   }

@@ -286,13 +286,9 @@ export class DataService {
       tipoPersona === 'alumnos'
         ? this.alumnos
         : this.profesores;
-    console.log(personas.find(
-      persona =>
-        persona.id === id
-    ));
+
     return personas.find(
-      persona =>
-        persona.id === id
+      persona => Number(persona.id) === Number(id)
     );
   }
 
@@ -324,7 +320,7 @@ export class DataService {
       cog1_alum: datos.apellido1 || null,
       cog2_alum: datos.apellido2 || null,
       correu_alum: datos.email,
-      foto_alum: datos.foto || datos.email?.split('@')[0],
+      foto_alum: datos.foto || datos.email?.split('@')[0] + '.JPG',
       susceptible: datos.susceptible ? 1 : 0,
       codi_grup_mat: datos.grup
     };
@@ -357,7 +353,7 @@ export class DataService {
       cog1_alum: datos.apellido1 || null,
       cog2_alum: datos.apellido2 || null,
       correu_alum: datos.email,
-      foto_alum: datos.foto || datos.email?.split('@')[0],
+      foto_alum: datos.foto || datos.email?.split('@')[0] + '.JPG',
       susceptible: datos.susceptible ? 1 : 0,
       codi_grup_mat: datos.grup
     };
