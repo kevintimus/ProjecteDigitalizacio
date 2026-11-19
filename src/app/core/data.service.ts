@@ -310,24 +310,32 @@ export class DataService {
   // CREAR UN ALUMNO
   // =====================================================
 
-  crearAlumno(datos: Partial<Alumno> & {
-    codigo?: string;
-  }): Observable<Alumno> {
 
-    const body = {
-      id_ieducat: Number(datos.codigo ?? datos.id),
-      nom_alum: datos.nombre,
-      cog1_alum: datos.apellido1 || null,
-      cog2_alum: datos.apellido2 || null,
-      correu_alum: datos.email,
-      foto_alum: datos.foto || datos.email?.split('@')[0] + '.JPG',
-      susceptible: datos.susceptible ? 1 : 0,
-      codi_grup_mat: datos.grup
-    };
-    console.log('Objeto que se envía al backend:', body);
+  crearAlumno(
+    datos: Partial<Alumno> & { codigo?: string },
+    foto: File | null
+  ): Observable<Alumno> {
+
+    const formData = new FormData();
+
+    formData.append('id_ieducat', String(datos.codigo ?? datos.id));
+    formData.append('nom_alum', datos.nombre ?? '');
+    formData.append('cog1_alum', datos.apellido1 || '');
+    formData.append('cog2_alum', datos.apellido2 || '');
+    formData.append('correu_alum', datos.email ?? '');
+    formData.append('susceptible', datos.susceptible ? '1' : '0');
+    formData.append('codi_grup_mat', String(datos.grup ?? ''));
+
+    if (foto) {
+      formData.append('foto', foto);
+    }
+
+    console.log('Datos enviados:', datos);
+    console.log('Fotografía enviada:', foto);
+
     return this.http.post<any>(
       `${this.api}/AfegirAlumne`,
-      body
+      formData
     ).pipe(
       map(datosRespuesta => this.mapAlumno(datosRespuesta)),
       tap(alumnoCreado => {
@@ -339,32 +347,33 @@ export class DataService {
     );
   }
 
+
   // =====================================================
   // MODIFICAR UN ALUMNO
   // =====================================================
 
   modificarAlumno(
     id: number,
-    datos: Partial<Alumno>
+    datos: Partial<Alumno>,
+    foto: File | null = null
   ): Observable<Alumno> {
 
-    const body: any = {
-      nom_alum: datos.nombre,
-      cog1_alum: datos.apellido1 || null,
-      cog2_alum: datos.apellido2 || null,
-      correu_alum: datos.email,
-      foto_alum: datos.foto || datos.email?.split('@')[0] + '.JPG',
-      susceptible: datos.susceptible ? 1 : 0,
-      codi_grup_mat: datos.grup
-    };
+    const formData = new FormData();
 
-    if (datos.susceptible !== undefined) {
-      body.susceptible = datos.susceptible ? 1 : 0;
+    formData.append('nom_alum', datos.nombre ?? '');
+    formData.append('cog1_alum', datos.apellido1 ?? '');
+    formData.append('cog2_alum', datos.apellido2 ?? '');
+    formData.append('correu_alum', datos.email ?? '');
+    formData.append('susceptible', datos.susceptible ? '1' : '0');
+    formData.append('codi_grup_mat', String(datos.grup ?? ''));
+
+    if (foto) {
+      formData.append('foto', foto);
     }
 
     return this.http.put<any>(
       `${this.api}/ModificarAlumne/${id}`,
-      body
+      formData
     ).pipe(
       map(datosRespuesta => this.mapAlumno(datosRespuesta)),
       tap(alumnoModificado => {
@@ -480,38 +489,29 @@ export class DataService {
   // MÉTODOS UTILIZADOS POR EL FORMULARIO DE ADMINISTRACIÓN
   // =====================================================
 
-  crear(tipoPersona: TipoPersona, datosPersona: any): void {
-    console.log("dades persona metode crear:");
-    console.log(datosPersona);
+  crear(tipoPersona: TipoPersona, datosPersona: any, foto: File | null = null): void {
     if (tipoPersona === 'alumnos') {
-      this.crearAlumno(datosPersona).subscribe({
-        next: () => {
-          console.log('Alumno creado correctamente.');
-        },
-        error: (error: any) => {
-          console.error('Error al crear el alumno:', error);
-        }
+      this.crearAlumno(datosPersona, foto).subscribe({
+        next: () => console.log('Alumno creado correctamente.'),
+        error: (error) => console.error('Error al crear el alumno:', error)
       });
-    } else {
+    } else if (tipoPersona === 'profesores') {
       this.crearProfesor(datosPersona).subscribe({
-        next: () => {
-          console.log('Profesor creado correctamente.');
-        },
-        error: (error: any) => {
-          console.error('Error al crear el profesor:', error);
-        }
+        next: () => console.log('Profesor creado correctamente.'),
+        error: (error) => console.error('Error al crear el profesor:', error)
       });
+
     }
   }
-
 
   actualizar(
     tipoPersona: TipoPersona,
     idPersona: number,
-    datosActualizados: any
+    datosActualizados: any,
+    foto: File | null = null
   ): void {
     if (tipoPersona === 'alumnos') {
-      this.modificarAlumno(idPersona, datosActualizados).subscribe({
+      this.modificarAlumno(idPersona, datosActualizados, foto).subscribe({
         next: () => {
           console.log('Alumno modificado correctamente.');
         },

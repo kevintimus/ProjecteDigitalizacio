@@ -37,39 +37,55 @@
                 <div class="campo"><label for="f-email">Correo</label><input id="f-email" name="email" type="email" [(ngModel)]="datosFormulario.email" /></div>
               }
             </div>
-            <label class="campo check">
-              <input name="susceptible" type="checkbox" [(ngModel)]="datosFormulario.susceptible" />
-              <span>Alumno susceptible</span>
-            </label>
+            <div class="campo">
+              <label for="f-foto">Fotografía del alumno</label>
 
-          } @else {
-            <div class="fila-2">
-              <div class="campo"><label for="f-pass">Contraseña de acceso</label>
-                <div class="campo-password">
-                  <input id="f-pass" name="contraseña" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="datosFormulario.contrassenya" />
-                  <button
-                    type="button"
-                    class="btn-ojo"
-                    (click)="togglePassword()"
-                    [attr.aria-label]="mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
-                    {{ mostrarPassword ? 'Ocultar' : 'Mostrar' }}
-                  </button>
+              <input id="f-foto" name="foto" type="file" accept=".jpg" (change)="seleccionarFoto($event)" [(ngModel)]="datosFormulario.foto" />
+
+              @if (vistaPreviaFoto) {
+                <div class="vista-previa">
+                  <img [src]="vistaPreviaFoto" alt="Vista previa del alumno">
                 </div>
-              </div>
-              <div class="campo">
-                <label for="f-rol">Rol</label>
-                <select id="f-rol" name="rol" [(ngModel)]="datosFormulario.admin">
-                  <option [ngValue]="false">Profesor (solo envía alumnos al baño)</option>
-                  <option [ngValue]="true">Admin (puede modificar datos)</option>
-                </select>
+              } @else if (accionGestion === 'editar' && datosFormulario.foto) {
+                <img
+                  [src]="datosService.urlFotos + datosFormulario.foto"
+                  class="foto-previa"
+                  alt="Fotografía actual del alumno"
+                />
+              }
+            </div>
+          }
+          <label class="campo check">
+            <input name="susceptible" type="checkbox" [(ngModel)]="datosFormulario.susceptible" />
+            <span>Alumno susceptible</span>
+          </label>
+
+        } @else {
+          <div class="fila-2">
+            <div class="campo"><label for="f-pass">Contraseña de acceso</label>
+              <div class="campo-password">
+                <input id="f-pass" name="contraseña" [type]="mostrarPassword ? 'text' : 'password'" [(ngModel)]="datosFormulario.contrassenya" />
+                <button
+                  type="button"
+                  class="btn-ojo"
+                  (click)="togglePassword()"
+                  [attr.aria-label]="mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                  {{ mostrarPassword ? 'Ocultar' : 'Mostrar' }}
+                </button>
               </div>
             </div>
-            @if (accionGestion === 'nuevo') {
-              <div class="campo"><label for="f-codigo">Código Profesor</label><input id="f-codigo" name="codigo" inputmode="numeric" type="number" [(ngModel)]="datosFormulario.codigo" /></div>
-            } @else {
-              <div class="campo"><label for="f-email">Correo</label><input id="f-email" name="email" type="email" [(ngModel)]="datosFormulario.email" /></div>
-            }
-
+            <div class="campo">
+              <label for="f-rol">Rol</label>
+              <select id="f-rol" name="rol" [(ngModel)]="datosFormulario.admin">
+                <option [ngValue]="false">Profesor (solo envía alumnos al baño)</option>
+                <option [ngValue]="true">Admin (puede modificar datos)</option>
+              </select>
+            </div>
+          </div>
+          @if (accionGestion === 'nuevo') {
+            <div class="campo"><label for="f-codigo">Código Profesor</label><input id="f-codigo" name="codigo" inputmode="numeric" type="number" [(ngModel)]="datosFormulario.codigo" /></div>
+          } @else {
+            <div class="campo"><label for="f-email">Correo</label><input id="f-email" name="email" type="email" [(ngModel)]="datosFormulario.email" /></div>
           }
         }
 

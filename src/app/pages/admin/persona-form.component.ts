@@ -17,8 +17,10 @@ class PersonaFormComponent {
 
   codigoBusqueda: number | null = null;
   mostrarPassword: Boolean = false;
+  fotoSeleccionada: File | null = null;
+  vistaPreviaFoto: string | null = null;
 
-  constructor(private datosService: DataService, private sesionService: AuthService, private rutaActual: ActivatedRoute, private enrutador: Router) {
+  constructor(protected datosService: DataService, private sesionService: AuthService, private rutaActual: ActivatedRoute, private enrutador: Router) {
     // Se actualiza el formulario si cambian la acción o el correo en la URL.
     this.rutaActual.paramMap.subscribe(() => this.cargarFormularioDesdeRuta());
     this.rutaActual.queryParamMap.subscribe(() => this.cargarFormularioDesdeRuta());
@@ -173,17 +175,19 @@ class PersonaFormComponent {
     );
 
     if (this.accionGestion === 'nuevo') {
-      this.datosService.crear(this.tipoPersona, datosLimpios);
+
       const nombreCreado = datosLimpios['nombre'];
+      this.datosService.crear(this.tipoPersona, datosLimpios, this.fotoSeleccionada);
       this.restablecerFormulario();
       this.mensajeEstado = { tipo: 'ok', texto: `${nombreCreado} se ha creado.` };
+
       return;
     }
 
     console.log('Contraseña del formulario:', this.datosFormulario.contrassenya);
     console.log('Datos que se enviarán:', datosLimpios);
 
-    this.datosService.actualizar(this.tipoPersona, idPersonaActual!, datosLimpios);
+    this.datosService.actualizar(this.tipoPersona, idPersonaActual!, datosLimpios, this.fotoSeleccionada);
     this.mensajeEstado = { tipo: 'ok', texto: 'Cambios guardados.' };
   }
 
@@ -233,6 +237,23 @@ class PersonaFormComponent {
       };
     }
   }
-}
+  seleccionarFoto(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const archivo = input.files?.[0];
 
+    if (!archivo) return;
+
+    if (!archivo.name.toLowerCase().endsWith('.jpg')) {
+      this.mensajeEstado = {
+        tipo: 'error',
+        texto: 'Solo se permiten imágenes JPG'
+      };
+      return;
+    }
+
+    this.fotoSeleccionada = archivo;
+
+    this.vistaPreviaFoto = URL.createObjectURL(archivo);
+  }
+}
 export default PersonaFormComponent;

@@ -23,9 +23,22 @@ app.use(express.json());
 const dbSQL = crearConfigBaseDades();
 const { alumnes, grups, professors, registres_lababo } = initModels(dbSQL);
 
+//-------------------ESTO ES LO QUE YO HE ECHO, MIRAMOS COMO ADAPTAR LOS METODOS PARA QUE FUNCIONE
 const __dirname = import.meta.dirname;
 
+const carpetaFotos = path.join(process.cwd(), 'fotos');
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, carpetaFotos);
+  },
+  filename: (req, file, cb) => {
+    const nombreFoto = `${req.body.correu_alum.split('@')[0]}.jpg`;
+    cb(null, nombreFoto);
+  }
+});
+
+const upload = multer({ storage });
 
 //region Obtenir Dades (GET)
 //________________________ OBTENIR DADES (GET) ________________________
@@ -185,19 +198,29 @@ app.get('/api/getGrups/:id', async (req,res) => {
 //------------------- ALUMNES -------------------
 //-----------------------------------------------
 
-app.post('/api/AfegirAlumne', async (req, res) => {
+app.post('/api/AfegirAlumne', upload.single('foto'), async (req, res) => {
   try {
-    const alum = await alumnes.create(req.body)
-    res.status(201).json(alum)
+
+    console.log('Archivo recibido:', req.file);
+    console.log('Datos recibidos:', req.body);
+
+    const alum = await alumnes.create({
+      ...req.body,
+      foto_alum: req.file ? req.file.filename : null
+    });
+
+    res.status(201).json(alum);
+
   } catch (error) {
     console.error("Error en el post /api/AfegirAlumne");
     console.error(error);
+
     res.status(500).json({
       mensaje: "Error al afegir un alumne nou",
       error: error.message
-    })
+    });
   }
-})
+});
 
 app.post('/api/AfegirAlumneAmbImport', async (req, res) => {
   try {
@@ -323,33 +346,38 @@ app.post('/api/AfegirGrupAmbImport', async (req, res) => {
 //-----------------------------------------------
 //------------------- ALUMNES -------------------
 //-----------------------------------------------
-app.put('/api/ModificarAlumne/:id', async (req, res) => {
-  try{
-    const alum = await alumnes.findByPk(req.params.id)
+app.put('/api/ModificarAlumne/:id', upload.single('foto'), async (req, res) => {
+  try {
+
+    const alum = await alumnes.findByPk(req.params.id);
+
     if (!alum) {
       return res.status(404).json({
         mensaje: "Alumne no trobat"
-      })
+      });
     }
+
     await alum.update({
       nom_alum: req.body.nom_alum,
       cog1_alum: req.body.cog1_alum,
       cog2_alum: req.body.cog2_alum,
-      foto_alum: req.body.foto_alum,
       correu_alum: req.body.correu_alum,
       susceptible: req.body.susceptible,
       codi_grup_mat: req.body.codi_grup_mat
     });
+
     res.json(alum);
+
   } catch (error) {
     console.error("Error en el put /api/ModificarAlumne/:id");
     console.error(error);
+
     res.status(500).json({
       mensaje: "Error al modificar l'alumne",
       error: error.message
     });
   }
-})
+});
 
 //-----------------------------------------------
 //----------------- PROFESSORS ------------------
@@ -543,19 +571,21 @@ app.delete('/api/EliminarGrup/:id', async (req,res) => {
 //FOTOS
 app.use('/fotos', express.static(path.join(__dirname, 'fotos')));
 
-//Subir fotos
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, path.join(__dirname, 'fotos')),
-  filename: (req, file, cb) => cb(null, file.originalname),
-});
 
-const upload = multer({
-  storage,
-  limits: { fileSize: 2 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const extension = path.extname(file.originalname).toLowerCase();
-    cb(null, extension === '.jpg');
-  }});
+
+//Subir fotos
+//const storage = multer.diskStorage({
+//  destination: (req, file, cb) => cb(null, path.join(__dirname, 'fotos')),
+//  filename: (req, file, cb) => cb(null, file.originalname),
+//});
+
+//const upload = multer({
+//  storage,
+//  limits: { fileSize: 2 * 1024 * 1024 },
+//  fileFilter: (req, file, cb) => {
+//    const extension = path.extname(file.originalname).toLowerCase();
+//    cb(null, extension === '.jpg');
+//  }});
 
 app.post('/api/SubirFotos', upload.array('fotos', 2000), (req, res) => {
   res.json({ subidas: req.files.map(f => f.filename) });
