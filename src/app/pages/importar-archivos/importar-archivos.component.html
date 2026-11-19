@@ -1,3 +1,5 @@
+<br>
+<h2>Importar archivos</h2>
 <div
   class="dropzone"
   [class.dragging]="arrastrandoArchivo"
@@ -32,4 +34,33 @@
 
 @if (archivoSeleccionado) {
   <button type="button" class="btn btn-claro" (click)="verContenidoArchivo()"> Importar </button>
+}
+
+<br>
+<h2>Importar fotos</h2>
+<div
+  class="dropzone"
+  [class.dragging]="arrastrandoFotos"
+  [class.con-archivo]="fotosSeleccionadas.length > 0"
+  (dragenter)="alArrastrarFotos($event)"
+  (dragover)="alArrastrarFotos($event)"
+  (dragleave)="alDejarZonaFotos($event)"
+  (drop)="alSoltarFotos($event)"
+  (click)="fotoInput.click()">
+
+  @if (fotosSeleccionadas.length > 0) {
+    <p class="dz-titulo">🖼️ {{ fotosSeleccionadas.length }} fotos seleccionadas</p>
+    <button type="button" class="btn btn-claro" (click)="quitarFotos($event, fotoInput)">Quitar</button>
+  } @else {
+    <p class="dz-titulo">Arrastra aquí las fotos de los alumnos o haz clic para elegirlas</p>
+    <p class="dz-ayuda">Nombre del archivo = correo antes del &#64; (jpg)</p>
+  }
+
+  <input #fotoInput type="file" accept="image/*" multiple hidden (change)="alElegirFotos($event)">
+</div>
+
+@if (errorFotos) { <p class="error">{{ errorFotos }}</p> }
+
+@if (fotosSeleccionadas.length > 0) {
+  <button type="button" class="btn btn-claro" (click)="subirFotos()">Subir fotos</button>
 }

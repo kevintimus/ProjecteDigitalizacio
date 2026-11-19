@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { crearConfigBaseDades } from './dbConf.js';
 import {initModels} from './Models/init-models.js'
 import * as path from "node:path";
+import multer from 'multer';
 
 
 //cd .\src\Backend\
@@ -23,6 +24,7 @@ const dbSQL = crearConfigBaseDades();
 const { alumnes, grups, professors, registres_lababo } = initModels(dbSQL);
 
 const __dirname = import.meta.dirname;
+
 
 
 //region Obtenir Dades (GET)
@@ -315,7 +317,7 @@ app.post('/api/AfegirGrupAmbImport', async (req, res) => {
 })
 //endregion
 
-//region Modificar
+//region Modificar (PUT)
 //________________________ MODIFICAR DADES (PUT) ________________________
 
 //-----------------------------------------------
@@ -448,7 +450,7 @@ app.put('/api/ModificarGrup/:id', async (req, res) => {
 })
 //endregion
 
-//region EliminarDades
+//region EliminarDades (DELETE)
 //________________________ ELIMINAR DADES (DELETE) ________________________
 
 //-----------------------------------------------
@@ -537,7 +539,27 @@ app.delete('/api/EliminarGrup/:id', async (req,res) => {
 })
 //endregion
 
+//region FOTOS
 //FOTOS
 app.use('/fotos', express.static(path.join(__dirname, 'fotos')));
+
+//Subir fotos
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, path.join(__dirname, 'fotos')),
+  filename: (req, file, cb) => cb(null, file.originalname),
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 2 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const extension = path.extname(file.originalname).toLowerCase();
+    cb(null, extension === '.jpg');
+  }});
+
+app.post('/api/SubirFotos', upload.array('fotos', 2000), (req, res) => {
+  res.json({ subidas: req.files.map(f => f.filename) });
+});
+//endregion
 
 app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));

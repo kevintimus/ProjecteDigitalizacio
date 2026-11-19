@@ -22,6 +22,9 @@ export class ImportarArchivosComponent {
   arrastrandoArchivo = false;
   archivoSeleccionado: File | null = null;
   mensajeError = '';
+  fotosSeleccionadas: File[] = [];
+  arrastrandoFotos = false;
+  errorFotos = '';
 
   protected alArrastrarArchivo(evento: DragEvent): void {
     evento.preventDefault();
@@ -65,10 +68,7 @@ export class ImportarArchivosComponent {
     }
   }
 
-  protected quitarArchivoSeleccionado(
-    evento: MouseEvent,
-    entradaArchivo: HTMLInputElement
-  ): void {
+  protected quitarArchivoSeleccionado(evento: MouseEvent, entradaArchivo: HTMLInputElement) : void {
     evento.stopPropagation();
 
     this.archivoSeleccionado = null;
@@ -223,5 +223,67 @@ export class ImportarArchivosComponent {
         }
       });
     }
+  }
+
+  // FOTOS
+
+  protected alArrastrarFotos(evento: DragEvent) {
+    evento.preventDefault();
+    this.arrastrandoFotos = true;
+  }
+
+  protected alDejarZonaFotos(evento: DragEvent) {
+    evento.preventDefault();
+    this.arrastrandoFotos = false;
+  }
+
+  protected alSoltarFotos(evento: DragEvent) {
+    evento.preventDefault();
+    this.arrastrandoFotos = false;
+
+    const fotosArrastradas = evento.dataTransfer?.files;
+
+    if (fotosArrastradas) {
+      this.validarFotosSeleccionadas(fotosArrastradas);
+    }
+  }
+
+  protected quitarFotos(evento: MouseEvent, fotoInput: HTMLInputElement) {
+    evento.stopPropagation();
+
+    this.fotosSeleccionadas.length = 0;
+    this.mensajeError = '';
+    fotoInput.value = '';
+  }
+
+  protected alElegirFotos(evento: Event) {
+    const input = evento.target as HTMLInputElement;
+    if (input.files) this.validarFotosSeleccionadas(input.files);
+  }
+
+  protected subirFotos() {
+    this.importacion.subirFotos(this.fotosSeleccionadas).subscribe({
+      next: (respuesta) => {
+        this.fotosSeleccionadas.length = 0;
+        console.log(respuesta.subidas.length);
+      }, error: () => {
+        this.errorFotos = "No se ha subido las fotos"
+      }
+    })
+  }
+
+  protected validarFotosSeleccionadas(archivos: FileList): void {
+    const lista = Array.from(archivos);
+    const validas = lista.filter(foto => foto.name.toLowerCase().endsWith('.jpg'));
+
+    this.errorFotos = validas.length < lista.length
+      ? 'Solo se admiten archivos .jpg'
+      : '';
+
+    const nuevas = validas.filter(
+      foto => !this.fotosSeleccionadas.some(existente => existente.name === foto.name)
+    );
+
+    this.fotosSeleccionadas = [...this.fotosSeleccionadas, ...nuevas];
   }
 }

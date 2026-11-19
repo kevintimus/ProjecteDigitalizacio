@@ -26,4 +26,16 @@ export class Importacion {
       grup
     );
   }
+
+  subirFotos(fotos: File[]) {
+    const formData = new FormData();
+    for (const foto of fotos) {
+      formData.append('fotos', foto);
+    }
+    return this.http.post<{ subidas: string[] }>(
+      'http://localhost:3000/api/SubirFotos',
+      formData
+    );
+  }
+
 }
