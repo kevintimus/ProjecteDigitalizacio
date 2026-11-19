@@ -322,8 +322,8 @@ export class DataService {
       nom_alum: datos.nombre,
       cog1_alum: datos.apellido1 || null,
       cog2_alum: datos.apellido2 || null,
-      foto_alum: datos.foto || 'fotito',
       correu_alum: datos.email,
+      foto_alum: datos.foto || datos.email?.split('@')[0],
       susceptible: datos.susceptible ? 1 : 0,
       codi_grup_mat: datos.grup
     };
